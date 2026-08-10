@@ -13,7 +13,7 @@ It improves on the concept of the Numark DJ2GO2 Touch by adding:
 
 Useful links:
 - [Numark Mixtrack Go website](https://www.numark.com/new/mixtrack-go/)
-- [Mixxx forum thread for this mapping](https://mixxx.discourse.group/t/script-for-numark-mixtrack-go-for-mixxx-2-6-also-works-with-previous-versions/34022/)
+- [Mixxx forum thread for this mapping](https://mixxx.discourse.group/t/numark-mixtrack-go-mapping/34099)
 
 The Numark Mixtrack Go controller is a USB Audio and MIDI Class compliant device and works with Linux, macOS, and Windows.
 
