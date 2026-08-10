@@ -47,7 +47,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 
 ## Controller Layout
 
-![alt text](https://github.com/josefveiga/numark_mixtrack_go_mixxx_mapping_manual/blob/[main]/numark_mixtrack_go.png?raw=true)
+![alt text](https://github.com/josefveiga/numark_mixtrack_go_mixxx_mapping_manual/blob/main/numark_mixtrack_go.png?raw=true)
 
 
 
