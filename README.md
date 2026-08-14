@@ -19,8 +19,8 @@ The Numark Mixtrack Go controller is a USB Audio and MIDI Class compliant device
 
 
 ```{note}
-   - While Fade FX can use any effect available on each channel, effects that dont have their reset point at 0, may not work as expected.
-   - Effects that don't reset at 0 are the effects that are at their lowest intensity when the knob is turned all the way to the left.
+   - While Fade FX can use any effect available on each channel, effects that don't have their reset point at 0
+     (when the knob is turned all the way to the left), may not work as expected.
    - These effects currently are:
        - Filter Echo
        - Mid/Side
