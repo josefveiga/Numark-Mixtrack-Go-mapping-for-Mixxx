@@ -69,7 +69,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 | **9**  | Cue Level           | Controls the headphone gain.                                                                                                                    |
 | **10** | Jog-wheel           | If Vinyl Mode is active (Shift + Load 2), the top surface controls scratching and the side surface controls Pitch Bend. If Vinyl Mode is inactive, both surfaces control pitch bend.|
 | **11**  | Tempo Fader        | Changes the track's playback speed.                                                                                                             |
-| **12**  | Sync               | Toggles Sync Lock.                                                                                                                              |
+| **12**  | Sync               | Long Press to activate Sync Lock. Tap to trigger beat sync (syncs tempo and phase).                                                             |
 | **13**  | Cue                | Sets the cue point or moves to the main cue point and stops. See options at **Preferences** > **Deck** > **Cue mode**.                          |
 | **-**   | Shift + Cue        | Moves to the main cue point and resumes playing from there.                                                                                     |
 | **-**   | Shift + Cue(2x)    | Loads the previous track on the Library and starts playing it from the main cue point. This action is prevented if **Preferences** > **Deck** > **Loading a track, when a deck is playing** is set to Reject.|
