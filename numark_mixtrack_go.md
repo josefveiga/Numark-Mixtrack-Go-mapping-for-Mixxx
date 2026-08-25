@@ -103,7 +103,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
   - Changes the track's playback speed.
 * - **12**
   - Sync
-  - Toggles Sync Lock.
+  - Long Press to activate Sync Lock. Tap to trigger beat sync (syncs tempo and phase).
 * - **13**
   - Cue
   - Sets the cue point or moves to the main cue point and stops. See options at **Preferences** > **Deck** > **Cue mode**.
