@@ -44,7 +44,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 
 ## Mixer Area Layout
 
-![alt text](../../_static/controllers/numark_mixtrack_go_mixer.svg "Title")
+![alt text](numark_mixtrack_go_mixer.svg "Title")
 
 
 ```{list-table}
@@ -107,7 +107,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 
 ## Deck Area Layout
 
-![alt text](../../_static/controllers/numark_mixtrack_go_deck1.svg "Title")
+![alt text](numark_mixtrack_go_deck1.svg "Title")
 
 
 ```{list-table}
@@ -155,7 +155,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
    {hwlabel}`ACAPEL` and {hwlabel}`INSTRU` functions require a STEMS track to be loaded and a MIXXX version 2.6 or higher.
 ```
 
-![alt text](../../_static/controllers/numark_mixtrack_go_deck2.svg "Title")
+![alt text](numark_mixtrack_go_deck2.svg "Title")
 
 ```{list-table}
 :header-rows: 1
