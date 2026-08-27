@@ -47,7 +47,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 ![alt text](numark_mixtrack_go_mixer.svg "Title")
 
 | Number | Control        | Function |
-| -------| --------       | ---------|
+| ------ | --------       | -------- |
 | 1      | Browser        | A knob for browsing the Library. If pushed, loads a track on the Preview Deck. |
 | 2      | Load           | Each button loads a track to the Deck on their side. |
 | -      | Shift Load1    | Switches the filter/low knobs between controlling the Low EQ and the Filter (or any other) Effect. |
@@ -80,7 +80,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 
 
 | Number | Control            | Function |
-| -------| -------------------| ---------|
+| -------| ------------------ | ---------|
 |11      | JogWheel           | If Vinyl Mode is active, the top surface controls scratching and the side surface controls Pitch Bend. If Vinyl Mode is inactive, both surfaces control pitch bend. Use Shift + Load 2 to toggle. |
 |12      | Tempo Fader        | Changes the track's playback speed. |
 |13      | Main Audio Output  | Connect this output to an amplifier or speaker system. This main out put volume is controlled by the Level knob. |
@@ -94,18 +94,16 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 |-       | Shift + Play/Pause | Moves to the main cue point and resumes playing from there. Same as Shift + Cue. |
 
 ```{note}
-   {hwlabel}`ACAPEL` and {hwlabel}`INSTRU` functions require a STEMS track to be loaded and a MIXXX version 2.6 or higher.
+   Acapel and Instru functions require a STEMS track to be loaded and a MIXXX version 2.6 or higher.
 ```
 
 ![alt text](numark_mixtrack_go_deck2.svg "Title")
 
-```{list-table}
-:header-rows: 1
-:align: center
+| Number     | Control            | Function |
+| ---------- | -------------------| ---------|
+| USB-C Port | -------------------| ---------|
 
-* - Number
-  - Control
-  - Function
+
 * - **19**
   - {hwlabel}`USB-C PORT`
   - This port serves as both source of power and data transfer to and from your computer or other device.
