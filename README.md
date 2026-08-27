@@ -46,51 +46,20 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 
 ![alt text](numark_mixtrack_go_mixer.svg "Title")
 
-
-```{list-table}
-:header-rows: 1
-:align: center
-
-* - Number
-  - Control
-  - Function
-* - **1**
-  - {hwlabel}`BROWSER`
-  - A knob for browsing the Library. If pushed, loads a track on the Preview Deck.
-* - **2**
-  - {hwlabel}`LOAD`
-  - Each button loads a track to the Deck on their side.
-* - **-**
-  - {hwlabel}`SHIFT` + {hwlabel}`LOAD 1`
-  - Switches the filter/low knobs between controlling the Low EQ and the Filter (or any other) Effect.
-* - **-**
-  - {hwlabel}`SHIFT` + {hwlabel}`LOAD 2`
-  - Toggles the Vinyl mode in the Jogwheel.
-* - **3**
-  - {hwlabel}`BLUETOOTH`
-  - There is currently no functionality for this LED in Mixxx.
-* - **4**
-  - {hwlabel}`MAIN LEVEL`
-  - Controls the Main Output Gain.
-* - **5**
-  - {hwlabel}`CUE LEVEL`
-  - Controls the Headphone Gain.
-* - **6**
-  - {hwlabel}`LEVEL`
-  - Controls each channel's Volume.
-* - **7**
-  - {hwlabel}`FILTER/LOW`
-  - Controls the Quick Effect currently selected for that channel, or the Low EQ. Use {hwlabel}`SHIFT` + {hwlabel}`LOAD 1` to switch between the Effect and Low EQ. Select the Effect in the Mixxx graphical interface.
-* - **8**
-  - {hwlabel}`HEADPHONE`
-  - Sends that channel's audio through the Headphone Output.
-* - **9**
-  - {hwlabel}`FADE FX`
-  - This button toggles the Fade FX feature in Mixxx. When Fade FX is active, moving the Crossfader away from the current deck will activate the Quick Effect of that deck. When inactive, the Crossfader will work normally.
-* - **10**
-  - {hwlabel}`CROSSFADER`
-  - Fades between the Left and the Right channel.
-```
+| Number | Control        | Function |
+| -------| --------       | ---------|
+| 1      | Browser        | A knob for browsing the Library. If pushed, loads a track on the Preview Deck. |
+| 2      | Load           | Each button loads a track to the Deck on their side. |
+| -      | Shift Load1    | Switches the filter/low knobs between controlling the Low EQ and the Filter (or any other) Effect. |
+| -      | Shift Load2    | Toggles the Vinyl mode in the Jogwheel. |
+| 3      | Bluetooth      | There is currently no functionality for this LED in Mixxx. |
+| 4      | Main Level     | Controls the Main Output Gain. |
+| 5      | Cue Level      | Controls the Headphone Gain. |
+| 6      | Level          | Controls each channel's Volume. |
+| 7      | Filter/Low     | Controls the Quick Effect currently selected for that channel, or the Low EQ. Use Shift + Load 1 to switch between the Effect and Low EQ. Select the Effect in the Mixxx graphical interface. |
+| 8      | Headphone      | Sends that channel's audio through the Headphone Output. |
+| 9      | Fade FX        | This button toggles the Fade FX feature in Mixxx. When Fade FX is active, moving the Crossfader away from the current deck will activate the Quick Effect of that deck. When inactive, the Crossfader will work normally. |
+| 10      | Crossfader    | Fades between the Left and the Right channel. |
 
 ```{note}
    - While Fade FX can use any effect available on each channel, effects that don't have their reset point at 0
