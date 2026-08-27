@@ -87,11 +87,11 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 |14      | Acapel             | The Acappella button activates an acappella from the loaded track. This is a STEMS button. |
 |15      | Instru             | The Instrumental button activates an instrumental from the loaded track. This is a STEMS button. |
 |16      | Cue                | Sets the cue point or moves to the main cue point and stops. See options at **Preferences** > **Deck** > **Cue mode**. |
-|-       | Shift Cue          | Moves to the main cue point and resumes playing from there. |
-|-       | Shift Cue(2x)      | Loads the previous track on the Library and starts playing it from the main cue point. This action is prevented if **Preferences** > **Deck** > **Loading a track, when a deck is playing** is set to Reject. |
+| -      | Shift Cue          | Moves to the main cue point and resumes playing from there. |
+| -      | Shift Cue(2x)      | Loads the previous track on the Library and starts playing it from the main cue point. This action is prevented if **Preferences** > **Deck** > **Loading a track, when a deck is playing** is set to Reject. |
 |17      | Sync               | Long Press to activate Sync Lock. Tap to trigger beat sync (syncs tempo and phase). |
 |18      | Play/Pause         | Plays or Pauses the track. |
-|-       | Shift + Play/Pause | Moves to the main cue point and resumes playing from there. Same as Shift + Cue. |
+| -      | Shift + Play/Pause | Moves to the main cue point and resumes playing from there. Same as Shift + Cue. |
 
 ```{note}
    Acapel and Instru functions require a STEMS track to be loaded and a MIXXX version 2.6 or higher.
@@ -101,40 +101,17 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 
 | Number     | Control            | Function |
 | ---------- | -------------------| ---------|
-| USB-C Port | -------------------| ---------|
+| 19         | USB-C Port         | This port serves as both source of power and data transfer to and from your computer or other device. |
+| 20         | Headphone Output   | Connect headphones to this 1/8” (3.5 mm) jack for monitoring a channel. The headphone volume is controlled using the Cue Level knob. |
+| 21         | Mode (**Shift**)   | Press this button to change the current function of the Performance Pads. A long press activates the **SHIFT** functions on other controls. |
+| 22         | Mode Leds          | These LEDs highlight the current pad mode. The modes cycle in the order HOT CUE->LOOPS->FX->SAMPLER->STEMS. The FX mode is activated when both the LOOPS and the SAMPLER LEDs are highlighted. |
+| 23         | Pads               | Performance Pads: These pads can be used to trigger Hotcues, Loops, Samples, Stems, and to apply effects. To change the function of the pads, press MODE. |
+| -          | **Hotcue Mode**    | In Hotcue Mode, a Pad sets a hotcue in the current position of the track. Shift + Pad clears the corresponding hotcue. |
+| -          | **Loops Mode**     | In Loops Mode, Pads 1, 2, 3 and 4 set 1, 2, 4 and 8 beat sized beatloops respectively. Shift + Pad clears the corresponding beatloop. |
+| -          | **FX Mode**        | In FX mode, Pad1 starts an Echo Effect, Pad2 starts a Flanger Effect, Pad3 starts a Reverb Effect and Pad4 starts a 1 beat sized beatroll. |
+| -          | **Sampler Mode**   | In Sampler Mode, each pad loads the currently selected track in the library into it's sampler. If it is already loaded, it starts playing the sample until the sample ends. Shift + Pad ejects the track from the corresponding sampler. |
+| -          | **STEMS mode**     | In STEMS Mode, pads mute and unmute the components of the loaded STEMS track: Pad1 affects the Drums stem part, Pad2 affects the FX/Bass stem part, Pad3 affects the Synth stem part and Pad4 affects the Voice stem part. |
 
-
-* - **19**
-  - {hwlabel}`USB-C PORT`
-  - This port serves as both source of power and data transfer to and from your computer or other device.
-* - **20**
-  - {hwlabel}`HEADPHONE OUTPUT`
-  - Connect headphones to this 1/8” (3.5 mm) jack for monitoring a channel. The headphone volume is controlled using the {hwlabel}`CUE LEVEL` knob.
-* - **21**
-  - {hwlabel}`MODE` (**SHIFT**)
-  - Press this button to change the current function of the Performance Pads. A long press activates the **SHIFT** functions on other controls.
-* - **22**
-  - {hwlabel}`MODE LEDS`
-  - These LEDs highlight the current pad mode. The modes cycle in the order HOT CUE->LOOPS->FX->SAMPLER->STEMS. The FX mode is activated when both the LOOPS and the SAMPLER LEDs are highlighted.
-* - **23**
-  - {hwlabel}`PADS`
-  - Performance Pads: These pads can be used to trigger Hotcues, Loops, Samples, Stems, and to apply effects. To change the function of the pads, press {hwlabel}`MODE`.
-* - **-**
-  - **Hotcue Mode**
-  - In Hotcue Mode, a Pad sets a hotcue in the current position of the track. {hwlabel}`SHIFT` + {hwlabel}`PAD` clears the corresponding hotcue.
-* - **-**
-  - **Loops Mode**
-  - In Loops Mode, Pads 1, 2, 3 and 4 set 1, 2, 4 and 8 beat sized beatloops respectively. {hwlabel}`SHIFT` + {hwlabel}`PAD` clears the corresponding beatloop.
-* - **-**
-  - **FX Mode**
-  - In FX mode, {hwlabel}`PAD1` starts an Echo Effect, {hwlabel}`PAD2` starts a Flanger Effect, {hwlabel}`PAD3` starts a Reverb Effect and {hwlabel}`PAD4` starts a 1 beat sized beatroll.
-* - **-**
-  - **Sampler Mode**
-  - In Sampler Mode, each pad loads the currently selected track in the library into it's sampler. If it is already loaded, it starts playing the sample until the sample ends. {hwlabel}`SHIFT` + {hwlabel}`PAD` ejects the track from the corresponding sampler.
-* - **-**
-  - **STEMS mode**
-  - In STEMS Mode, pads mute and unmute the components of the loaded STEMS track: {hwlabel}`PAD1` affects the Drums stem part, {hwlabel}`PAD2` affects the FX/Bass stem part, {hwlabel}`PAD3` affects the Synth stem part and {hwlabel}`PAD4` affects the Voice stem part.
-```
 ```{note}
    **STEMS mode** functionality requires a STEMS track to be loaded and a MIXXX version 2.6 or higher.
 ```
