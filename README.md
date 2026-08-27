@@ -39,7 +39,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
   - On each side there is a deck control area, where in Mixxx the left deck control will control Deck 1 and the right deck will control Deck 2.
   - Both decks have essentially the same controls each. What differs is that the left side also has the connector to the Main Output and on the right side there's both a USB-C plug and Headphones connector.
 
-![alt text](../../_static/controllers/numark_mixtrack_go_full.svg "Title")
+![alt text](numark_mixtrack_go_full.svg "Title")
 
 
 ## Mixer Area Layout
