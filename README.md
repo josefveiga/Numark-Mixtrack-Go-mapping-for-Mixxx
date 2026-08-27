@@ -113,5 +113,5 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 | -          | **STEMS mode**     | In STEMS Mode, pads mute and unmute the components of the loaded STEMS track: Pad1 affects the Drums stem part, Pad2 affects the FX/Bass stem part, Pad3 affects the Synth stem part and Pad4 affects the Voice stem part. |
 
 ```{note}
-   **STEMS mode** functionality requires a STEMS track to be loaded and a MIXXX version 2.6 or higher.
+   STEMS mode functionality requires a STEMS track to be loaded and a MIXXX version 2.6 or higher.
 ```
