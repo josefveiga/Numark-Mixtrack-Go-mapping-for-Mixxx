@@ -79,47 +79,20 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 ![alt text](numark_mixtrack_go_deck1.svg "Title")
 
 
-```{list-table}
-:header-rows: 1
-:align: center
+| Number | Control            | Function |
+| -------| -------------------| ---------|
+|11      | JogWheel           | If Vinyl Mode is active, the top surface controls scratching and the side surface controls Pitch Bend. If Vinyl Mode is inactive, both surfaces control pitch bend. Use Shift + Load 2 to toggle. |
+|12      | Tempo Fader        | Changes the track's playback speed. |
+|13      | Main Audio Output  | Connect this output to an amplifier or speaker system. This main out put volume is controlled by the Level knob. |
+|14      | Acapel             | The Acappella button activates an acappella from the loaded track. This is a STEMS button. |
+|15      | Instru             | The Instrumental button activates an instrumental from the loaded track. This is a STEMS button. |
+|16      | Cue                | Sets the cue point or moves to the main cue point and stops. See options at **Preferences** > **Deck** > **Cue mode**. |
+|-       | Shift Cue          | Moves to the main cue point and resumes playing from there. |
+|-       | Shift Cue(2x)      | Loads the previous track on the Library and starts playing it from the main cue point. This action is prevented if **Preferences** > **Deck** > **Loading a track, when a deck is playing** is set to Reject. |
+|17      | Sync               | Long Press to activate Sync Lock. Tap to trigger beat sync (syncs tempo and phase). |
+|18      | Play/Pause         | Plays or Pauses the track. |
+|-       | Shift + Play/Pause | Moves to the main cue point and resumes playing from there. Same as Shift + Cue. |
 
-* - Number
-  - Control
-  - Function
-* - **11**
-  - {hwlabel}`JOGWHEEL`
-  - If Vinyl Mode is active, the top surface controls scratching and the side surface controls Pitch Bend. If Vinyl Mode is inactive, both surfaces control pitch bend. Use {hwlabel}`SHIFT` + {hwlabel}`LOAD 2` to toggle.
-* - **12**
-  - {hwlabel}`TEMPO FADER`
-  - Changes the track's playback speed.
-* - **13**
-  - {hwlabel}`MAIN AUDIO OUTPUT`
-  - Connect this output to an amplifier or speaker system. This main out put volume is controlled by the {hwlabel}`LEVEL` knob.
-* - **14**
-  - {hwlabel}`ACAPEL`
-  - The Acappella button activates an acappella from the loaded track. This is a STEMS button.
-* - **15**
-  - {hwlabel}`INSTRU`
-  - The Instrumental button activates an instrumental from the loaded track. This is a STEMS button.
-* - **16**
-  - {hwlabel}`CUE`
-  - Sets the cue point or moves to the main cue point and stops. See options at **Preferences** > **Deck** > **Cue mode**.
-* - **-**
-  - {hwlabel}`SHIFT` + {hwlabel}`CUE`
-  - Moves to the main cue point and resumes playing from there.
-* - **-**
-  - {hwlabel}`SHIFT` + {hwlabel}`CUE`(2x)
-  - Loads the previous track on the Library and starts playing it from the main cue point. This action is prevented if **Preferences** > **Deck** > **Loading a track, when a deck is playing** is set to Reject.
-* - **17**
-  - {hwlabel}`SYNC`
-  - Long Press to activate Sync Lock. Tap to trigger beat sync (syncs tempo and phase).
-* - **18**
-  - {hwlabel}`PLAY/PAUSE`
-  - Plays or Pauses the track.
-* - **-**
-  - {hwlabel}`SHIFT` + {hwlabel}`PLAY/PAUSE`
-  - Moves to the main cue point and resumes playing from there. Same as Shift + Cue.
-```
 ```{note}
    {hwlabel}`ACAPEL` and {hwlabel}`INSTRU` functions require a STEMS track to be loaded and a MIXXX version 2.6 or higher.
 ```
