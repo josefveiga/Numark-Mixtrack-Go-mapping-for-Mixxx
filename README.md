@@ -5,6 +5,7 @@ If you find some problem with the mapping, post a comment in the forum thread an
 
 To use this mapping, put both Numark-Mixtrack-Go.midi.xml and Numark-Mixtrack-Go.scripts.js in the Controllers directory.
 See Preferences -> Library -> Setting Directory -> Open Mixxx Settings Folder.
+
 # Numark Mixtrack Go
 
 
