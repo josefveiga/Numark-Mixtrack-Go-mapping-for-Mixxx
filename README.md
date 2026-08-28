@@ -1,3 +1,10 @@
+This repository holds the mapping files for the Mixtrack Go.
+In principle, the files here will be updated with potential bug corrections or added features ahead and independently of their inclusion in a Mixxx release.
+
+If you find some problem with the mapping, post a comment in the forum thread and i'll address it asap and upload the fixed version here.
+
+To use this mapping, put both Numark-Mixtrack-Go.midi.xml and Numark-Mixtrack-Go.scripts.js in the Controllers directory.
+See Preferences -> Library -> Setting Directory -> Open Mixxx Settings Folder.
 # Numark Mixtrack Go
 
 
