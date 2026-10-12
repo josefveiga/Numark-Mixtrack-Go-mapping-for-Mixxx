@@ -5,6 +5,20 @@
     <author>mixo101</author>
     <description>Midi mapping for the Numark Mixtrack Go controller</description>
   </info>
+  <settings>
+    <group label="Jog Wheel">
+      <option variable="pitchBendSharpness" label="Pitch Bend Sharpness" type="enum">
+        <value label="Very Fine">0.05</value>
+          <value label="Fine">0.1</value>
+           <value label="Normal" default="true">0.2</value>
+           <value label="Coarse">0.4</value>
+           <value label="Very Coarse">0.6</value>
+           <description>
+             Select the sharpness of the pitch bend
+           </description>
+      </option>
+    </group>
+  </settings>
   <controller id="Numark">
     <scriptfiles>
       <file filename="lodash.mixxx.js" functionprefix=""/>
