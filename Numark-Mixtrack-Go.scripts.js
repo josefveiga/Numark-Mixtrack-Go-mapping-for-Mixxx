@@ -624,6 +624,8 @@ const IdentityRequestSysex = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
 // https://github.com/mixxxdj/mixxx/wiki/Serato%20sysex
 const ControllerStatusSysex = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
 
+const pitchBendSharpnessSetting = engine.getSetting("pitchBendSharpness");
+
 /**
  * Required function.
  * Sets the leds, instantiates the 2 deck objects and sets Mixxx with the controls values of the controller.
@@ -1255,10 +1257,10 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
 
     this.jogTurn = function(_channel, _control, value) {
         let newValue;
-        if (value < 64) {
-            newValue = value;
+        if (value === 127) {
+            newValue = -1 * pitchBendSharpnessSetting;
         } else {
-            newValue = value - 128;
+            newValue = pitchBendSharpnessSetting;
         }
 
         if (engine.isScratching(deckNumber)) {
