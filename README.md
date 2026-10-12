@@ -1,14 +1,22 @@
 This repository holds the mapping files for the Mixtrack Go.
 In principle, the files here will be updated with potential bug corrections or added features ahead and independently of their inclusion in a Mixxx release.
 
+To use this mapping, put both **Numark-Mixtrack-Go.midi.xml** and **Numark-Mixtrack-Go.scripts.js** in the Controllers directory.
+See Preferences -> Library -> Setting Directory -> Open Mixxx Settings Folder.
+
 Branches:
- - main - this branch will hold the version included in mixxx (still in review).
- - alpha - this branch will hold the most recent version overall
+ - **main** - holds the version included in mixxx (still in review)
+ - **alpha** - holds the most recent version
     - Here will be the most recent features and bugfixes.
     - If you find some problem with the mapping, post a comment in the forum thread and i'll upload the fixed version here.
 
-To use this mapping, put both Numark-Mixtrack-Go.midi.xml and Numark-Mixtrack-Go.scripts.js in the Controllers directory.
-See Preferences -> Library -> Setting Directory -> Open Mixxx Settings Folder.
+**alpha files:**  (right click to download here)
+ - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.midi.xml) 
+ - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
+
+ **alpha version extra features and bugfixes:**
+ - currently none
+
 
 # Numark Mixtrack Go
 
