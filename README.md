@@ -15,7 +15,8 @@ Branches:
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
 
  **alpha version extra features and bugfixes:**
- - currently none
+ - Added User Settings: 
+    - Jog-Wheel: Pitch Bend Sharpness
 
 
 # Numark Mixtrack Go
