@@ -51,21 +51,6 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
    - Click **Apply** to save the changes.
 
 
-## Mapping Settings
-
-This mapping currently allows for some user settings.
-
-To configure settings:
-- Go to **Options** > **Preferences** > **Controllers**
-- Select **Numark Mixtrack Go** > **confirm this mapping is loaded**
-- Choose your personalized settings on the **Mapping Settings** tab.
-
-Currently available user settings:
-
-Jog Wheel
- - Pitch Bend Sharpness
- 
-
 ## Controller Layout
 
 - The Numark Mixtrack Go's layout has 3 sections:
