@@ -10,7 +10,7 @@ Branches:
     - Here will be the most recent features and bugfixes.
     - If you find some problem with the mapping, post a comment in the forum thread and i'll upload the fixed version here.
 
-**alpha files:**  (right click to download here)
+**alpha files:**  download here (right click + Save Link As) 
  - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.midi.xml) 
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
 
