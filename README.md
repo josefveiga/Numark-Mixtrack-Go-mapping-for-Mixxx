@@ -15,7 +15,8 @@ Branches:
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
 
  **alpha version extra features and bugfixes:**
- - currently none
+ - Added User Settings: 
+    - Jog-Wheel: Pitch Bend Sharpness
 
 
 # Numark Mixtrack Go
@@ -43,14 +44,27 @@ The Numark Mixtrack Go controller is a USB Audio and MIDI Class compliant device
 This controller has a built-in 4 channel output sound card, with a stereo Main output (3.5mm jack) and stereo Headphone output (3.5mm jack).
 
 - To configure the controller's sound card:
-   - Open **Preferences** > **Sound Hardware**
+   - Open **Options** > **Preferences** > **Sound Hardware**
    - Select the **Output** tab.
    - From the **Main** drop-down menu, select the audio interface, then **Channels 1-2**.
    - From the **Headphones** drop-down menu, select the audio interface, then **Channels 3-4**.
    - Click **Apply** to save the changes.
 
 
+## Mapping Settings
 
+This mapping currently allows for some user settings.
+
+To configure settings:
+- Go to **Options** > **Preferences** > **Controllers**
+- Select **Numark Mixtrack Go** > **confirm this mapping is loaded**
+- Choose your personalized settings on the **Mapping Settings** tab.
+
+Currently available user settings:
+
+Jog Wheel
+ - Pitch Bend Sharpness
+ 
 
 ## Controller Layout
 
