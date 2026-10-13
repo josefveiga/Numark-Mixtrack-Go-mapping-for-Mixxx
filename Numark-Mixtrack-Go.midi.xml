@@ -9,13 +9,15 @@
     <group label="Jog Wheel">
       <option variable="pitchBendSharpness" label="Pitch Bend Sharpness" type="enum">
         <value label="Very Fine">0.05</value>
-          <value label="Fine">0.1</value>
-           <value label="Normal" default="true">0.2</value>
-           <value label="Coarse">0.4</value>
-           <value label="Very Coarse">0.6</value>
-           <description>
-             Select the sharpness of the pitch bend
-           </description>
+        <value label="Fine">0.1</value>
+        <value label="Normal (good with aligned beatgrips and sync enabled)" default="true">0.2</value>
+        <value label="Coarse">0.4</value>
+        <value label="Very Coarse">0.6</value>
+        <value label="Fast (better for manual beatmatching)">0.8</value>
+        <value label="Very Fast (same as old setting)">1</value>
+        <description>
+            Select the sharpness of the pitch bend
+        </description>
       </option>
     </group>
   </settings>
