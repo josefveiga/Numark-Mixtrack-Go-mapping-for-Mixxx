@@ -16,7 +16,7 @@ Branches:
 
  **alpha version extra features and bugfixes:**
  - Added User Settings: 
-    - Jog-Wheel: Pitch Bend Sharpness
+    - Jog-Wheel: Pitch Bend Sharpness (ongoing changes)
 
 
 # Numark Mixtrack Go
