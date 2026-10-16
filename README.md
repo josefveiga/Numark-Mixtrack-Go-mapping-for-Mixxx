@@ -16,7 +16,12 @@ Branches:
 
  **alpha version extra features and bugfixes:**
  - Added User Settings: 
-    - Jog-Wheel: Pitch Bend Sharpness (ongoing changes)
+    - Jog Wheel
+       - Pitch Bend Sharpness 
+         - a finer sharpness is more suitable for fine tuning the beatmatching when using sync with grid aligned tracks.
+         - a more coarse option is better suited for faster manual beatmatching. 
+       - Vinyl Mode Default State 
+         - when Mixxx starts, Vinyl Mode will be as selected here. 
 
 
 # Numark Mixtrack Go
