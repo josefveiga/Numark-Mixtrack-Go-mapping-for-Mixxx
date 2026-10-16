@@ -615,8 +615,6 @@ const padModes = ["hotcue", "loops", "fx", "sampler", "stems"];
 // 0 for filter, 1 for low
 let filterLowSwitch = 1;
 
-let vinylModeEnabled = true;
-
 // to disable the lights demo, from npredella@mixxxforums
 const IdentityRequestSysex = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
 
@@ -624,7 +622,9 @@ const IdentityRequestSysex = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
 // https://github.com/mixxxdj/mixxx/wiki/Serato%20sysex
 const ControllerStatusSysex = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
 
+//settings
 const pitchBendSharpnessSetting = engine.getSetting("pitchBendSharpness");
+const isVinylModeInitiallyActivated = engine.getSetting("vinylModeDefaultState");
 
 /**
  * Required function.
@@ -687,7 +687,6 @@ NumarkMixtrackGo.shutdown = function() {
 
 NumarkMixtrackGo.browseEncoder = new components.Encoder({
     isLibraryScrolling: engine.getValue("[PreviewDeck1]", "play") === 0,
-
     input: function(_channel, control, value, status) {
 
         if (status === NumarkMixtrackGo.controls.browse_encoder_rotate[0]) {
@@ -705,7 +704,6 @@ NumarkMixtrackGo.browseEncoder = new components.Encoder({
     },
 
     onEnconderRotateEvent: function(rotateValue) {
-
         if (this.isLibraryScrolling) {
             engine.setValue("[Playlist]", "SelectTrackKnob", rotateValue);
         } else { // isStripSearching - 0.05 modifies the fraction of the duration of the track the encoder moves per detent while rotating
@@ -819,14 +817,9 @@ NumarkMixtrackGo.filterLowSwitcher = new components.Button({
 
 // toggles the availability of the scratch function on the jog-wheels
 NumarkMixtrackGo.vinylModeSwitcher = new components.Button({
-    input: function(_channel, _control, value) {
-        if (value === 127) {
-            if (vinylModeEnabled) {
-                vinylModeEnabled = false; ;
-            } else {
-                vinylModeEnabled = true;
-            }
-        }
+    input: function(_channel, _control, _value) {
+        NumarkMixtrackGo.leftDeck.jogWheel.vinylMode = !NumarkMixtrackGo.leftDeck.jogWheel.vinylMode;
+        NumarkMixtrackGo.rightDeck.jogWheel.vinylMode = !NumarkMixtrackGo.rightDeck.jogWheel.vinylMode;
     },
 });
 
@@ -1244,31 +1237,34 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         }
     });//mode end
 
-    this.jogTouch = function(_channel, _control, value) {
-        if (vinylModeEnabled) {
-            if (value === 127) {
-                const alpha = 1.0/8;
-                engine.scratchEnable(deckNumber, 128, 33+1/3, alpha, alpha/32);
-            } else {
-                engine.scratchDisable(deckNumber);
+    this.jogWheel = new components.JogWheelBasic({
+        wheelResolution: 242, // ticks per full revolution (Mixtrack Go has 242 aprox)
+        alpha: 1/8, // default
+        beta: this.alpha/32, // optional, default as is, here for further tuning if necessary
+        rpm: 33 + 1/3, //optional, default as is, here for further tuning if necessary
+        group: group,
+        vinylMode: isVinylModeInitiallyActivated,
+        //overriden to set pitch bend sharpness
+        inputWheel: function(_channel, _control, value, _status, _group) {
+            if (!this.deck) {
+                return;
             }
-        }
-    };
+            
+            let pitchBendValue;
+            if (value === 127) {
+                pitchBendValue = -1 * pitchBendSharpnessSetting;
+            } else { //0x01
+                pitchBendValue = pitchBendSharpnessSetting;
+            }
 
-    this.jogTurn = function(_channel, _control, value) {
-        let newValue;
-        if (value === 127) {
-            newValue = -1 * pitchBendSharpnessSetting;
-        } else {
-            newValue = pitchBendSharpnessSetting;
-        }
-
-        if (engine.isScratching(deckNumber)) {
-            engine.scratchTick(deckNumber, newValue); // Scratch!
-        } else {
-            engine.setValue(group, "jog", newValue); // Pitch bend
-        }
-    };
+            value = this.inValueScale(value);
+            if (engine.isScratching(this.deck)) {
+                engine.scratchTick(this.deck, value);
+            } else {
+                this.inSetValue(pitchBendValue);
+            }
+        },
+    });
 
     this.filterLowPot = new components.Pot({
         input: function(_channel, _control, value) {
