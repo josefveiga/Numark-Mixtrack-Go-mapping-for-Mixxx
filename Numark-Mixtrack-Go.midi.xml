@@ -17,7 +17,7 @@
             Select the sharpness of the pitch bend
         </description>
       </option>
-      <option variable="vinylModeDefaultState" label="Vinyl Mode active by Default" type="boolean" default="true">
+      <option variable="vinylModeDefaultState" label="Vinyl Mode Default State" type="boolean" default="true">
         <description>
             Select the state of vinyl mode for this mapping when Mixxx launches
         </description>
