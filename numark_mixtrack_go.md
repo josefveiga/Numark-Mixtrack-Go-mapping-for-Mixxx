@@ -32,17 +32,21 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 
 ## Mapping Settings
 
-This mapping currently allows for some user settings.
+This mapping allows for some user settings.
 
 To configure settings:
 - Go to **Options** > **Preferences** > **Controllers**
 - Select **Numark Mixtrack Go** > **confirm this mapping is loaded**
 - Choose your personalized settings on the **Mapping Settings** tab.
 
-Currently available user settings:
+Available user settings:
 
-Jog Wheel
- - Pitch Bend Sharpness
+- Jog Wheel
+    - Pitch Bend Sharpness 
+       - a finer sharpness is more suitable for fine tuning the beatmatching when using sync with grid aligned tracks.
+       - a more coarse option is better suited for faster manual beatmatching. 
+    - Vinyl Mode Default State 
+       - when Mixxx starts, Vinyl Mode will be as selected here. 
 
 
 ## Controller Layout
