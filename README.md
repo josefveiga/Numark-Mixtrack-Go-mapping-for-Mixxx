@@ -15,14 +15,16 @@ Branches:
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
 
  **alpha version extra features and bugfixes:**
- - Added User Settings: 
-    - Jog Wheel
-       - Pitch Bend Sharpness 
-         - a finer sharpness is more suitable for fine tuning the beatmatching when using sync with grid aligned tracks.
-         - a more coarse option is better suited for faster manual beatmatching. 
-       - Vinyl Mode Default State 
-         - when Mixxx starts, Vinyl Mode will be as selected here. 
-
+ - Jog Wheel
+    - Pitch Bend Sharpness 
+       - a finer sharpness is more suitable for fine tuning the beatmatching when using sync with grid aligned tracks.
+       - a more coarse option is better suited for faster manual beatmatching. 
+    - Vinyl Mode Default State On
+      - check this box for the Vinyl Mode to be activated from the start. 
+- Initial LEDs State
+    - Initial LEDs Setting Delay
+      - select a delay in seconds for the LEDs to be set (default is 2s).
+      - this delay should be long enough for the lightshow termination to finish.
 
 # Numark Mixtrack Go
 
