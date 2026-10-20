@@ -17,9 +17,16 @@
             Select the sharpness of the pitch bend
         </description>
       </option>
-      <option variable="vinylModeDefaultState" label="Vinyl Mode Default State" type="boolean" default="true">
+      <option variable="vinylModeDefaultStateOn" label="Vinyl Mode Default State On" type="boolean" default="true">
         <description>
             Select the state of vinyl mode for this mapping when Mixxx launches
+        </description>
+      </option>
+    </group>
+    <group label="Initial LED state">
+      <option variable="initialLEDSettingDelay" label="Initial Led Setting Delay" type="integer" min="1" max="10" step="1" default="2">
+        <description>
+            Select the delay of the initial setting of LEDs. It should happen after the lightshow is finished.
         </description>
       </option>
     </group>
