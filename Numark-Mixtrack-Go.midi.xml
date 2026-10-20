@@ -14,12 +14,12 @@
         <value label="Coarse (better for manual beatmatching)">0.8</value>
         <value label="Very Coarse">1</value>
         <description>
-            Select the sharpness of the pitch bend
+            Select the sharpness of the pitch bend.
         </description>
       </option>
       <option variable="vinylModeDefaultStateOn" label="Vinyl Mode Default State On" type="boolean" default="true">
         <description>
-            Select the state of vinyl mode for this mapping when Mixxx launches
+            Check this box for the Vinyl Mode to be activated from the start.
         </description>
       </option>
     </group>
