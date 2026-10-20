@@ -624,6 +624,14 @@ const IdentityRequestSysex = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
 // https://github.com/mixxxdj/mixxx/wiki/Serato%20sysex
 const ControllerStatusSysex = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
 
+//settings
+const pitchBendSharpnessSetting = engine.getSetting("pitchBendSharpness");
+const isVinylModeInitiallyActivated = engine.getSetting("vinylModeDefaultState");
+const initialLEDSettingDelay = engine.getSetting("initialLEDSettingDelay");
+
+// Fade fx blinking
+const fadeFxIndicatorControl = "indicator_500ms";
+
 /**
  * Required function.
  * Sets the leds, instantiates the 2 deck objects and sets Mixxx with the controls values of the controller.
@@ -640,32 +648,33 @@ NumarkMixtrackGo.init = function() {
     // https://github.com/mixxxdj/mixxx/wiki/Serato%20sysex
     midi.sendSysexMsg(ControllerStatusSysex, ControllerStatusSysex.length);
 
-    // Led setting needs to be done after we receive a sysex response from
-    // midi.sendSysexMsg(IdentityRequestSysex, IdentityRequestSysex.length);
-    // Since we can't catch sysex messages and the controller sends it well under 10ms
-    // after we send the Identity request message 50ms is more than enough.
-    engine.beginTimer(50, () => {
+    // The initial LED setting needs to be started after the end of the lights demo
+    // stopping event in the controller or that event will turn off LEDs that were already set.
+    // I very rarely see this and i can't currently find a way to consistently
+    // reproduce it.
+    // As far as i know, there is no way to listen for the end of that event so
+    // we go for a lazy start of the led setting routine  with a generous 2000ms delay.
+    // A user setting is added for further tuning in the odd chance this
+    // is happening with device unit specific variation or an unforeseen use case.
+    engine.beginTimer(initialLEDSettingDelay * 1000, () => {
         NumarkMixtrackGo.leftDeck.setDeckStartLeds();
         NumarkMixtrackGo.rightDeck.setDeckStartLeds();
-    }, true);
-
-    // Fade fx blinking
-    const fadeFxIndicatorControl = "indicator_500ms";
-
-    engine.makeConnection("[App]", fadeFxIndicatorControl, function() {
-        if (isFadeFxOn) {
-            if (engine.getValue("[App]", fadeFxIndicatorControl) === 0) {
+        // The FadeFX LED is a special case as it is the only LED that isn't deck specific.
+        engine.makeConnection("[App]", fadeFxIndicatorControl, function() {
+            if (isFadeFxOn) {
+                if (engine.getValue("[App]", fadeFxIndicatorControl) === 0) {
+                    NumarkMixtrackGo.led.setFadefxDim();
+                    NumarkMixtrackGo.led.setFadefxShiftDim();
+                } else {
+                    NumarkMixtrackGo.led.setFadefxBright();
+                    NumarkMixtrackGo.led.setFadefxShiftBright();
+                }
+            } else {
                 NumarkMixtrackGo.led.setFadefxDim();
                 NumarkMixtrackGo.led.setFadefxShiftDim();
-            } else {
-                NumarkMixtrackGo.led.setFadefxBright();
-                NumarkMixtrackGo.led.setFadefxShiftBright();
             }
-        } else {
-            NumarkMixtrackGo.led.setFadefxDim();
-            NumarkMixtrackGo.led.setFadefxShiftDim();
-        }
-    });
+        });
+    }, true);
 
     // softTakeovers for the Filter/Low knob switching
     engine.softTakeover("[QuickEffectRack1_[Channel1]]", "super1", true);
@@ -817,14 +826,9 @@ NumarkMixtrackGo.filterLowSwitcher = new components.Button({
 
 // toggles the availability of the scratch function on the jog-wheels
 NumarkMixtrackGo.vinylModeSwitcher = new components.Button({
-    input: function(_channel, _control, value) {
-        if (value === 127) {
-            if (vinylModeEnabled) {
-                vinylModeEnabled = false; ;
-            } else {
-                vinylModeEnabled = true;
-            }
-        }
+    input: function(_channel, _control, _value) {
+        NumarkMixtrackGo.leftDeck.jogWheel.vinylMode = !NumarkMixtrackGo.leftDeck.jogWheel.vinylMode;
+        NumarkMixtrackGo.rightDeck.jogWheel.vinylMode = !NumarkMixtrackGo.rightDeck.jogWheel.vinylMode;
     },
 });
 
@@ -849,7 +853,12 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
     const loadConnection = engine.makeConnection(group, "track_loaded", function() {
         isStemsTrackLoaded = false;
         if (engine.getValue(group, "track_loaded") === 1) {
-            stemsStateConnection.trigger(); // to evaluate if its a stems track
+            try { // stemsStateConnection is undefined in mixxx < 2.6
+                stemsStateConnection.trigger(); // to evaluate if its a stems track
+            } catch (error) {
+                console.log(error);
+            }
+
             NumarkMixtrackGo.led.setLoadBright(deckIndex);
         } else {
             NumarkMixtrackGo.led.setLoadDim(deckIndex);
@@ -1128,7 +1137,7 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         playIndicatorConnection.trigger();
         playAndCueShiftTrackLoadedConnection.trigger();
 
-        try {
+        try { // stemsStateConnection is undefined in mixxx < 2.6
             stemsStateConnection.trigger();
         } catch (error) {
             console.log(error);
@@ -1242,31 +1251,34 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         }
     });//mode end
 
-    this.jogTouch = function(_channel, _control, value) {
-        if (vinylModeEnabled) {
-            if (value === 127) {
-                const alpha = 1.0/8;
-                engine.scratchEnable(deckNumber, 128, 33+1/3, alpha, alpha/32);
-            } else {
-                engine.scratchDisable(deckNumber);
+    this.jogWheel = new components.JogWheelBasic({
+        wheelResolution: 242, // ticks per full revolution (Mixtrack Go has 242 approximately)
+        alpha: 1/8, // default
+        beta: this.alpha/32, // optional, default as is, here for further tuning if necessary
+        rpm: 33 + 1/3, //optional, default as is, here for further tuning if necessary
+        group: group,
+        vinylMode: isVinylModeInitiallyActivated,
+        //overridden to set pitch bend sharpness
+        inputWheel: function(_channel, _control, value, _status, _group) {
+            if (!this.deck) {
+                return;
             }
-        }
-    };
 
-    this.jogTurn = function(_channel, _control, value) {
-        let newValue;
-        if (value < 64) {
-            newValue = value;
-        } else {
-            newValue = value - 128;
-        }
+            let pitchBendValue;
+            if (value === 127) {
+                pitchBendValue = -1 * pitchBendSharpnessSetting;
+            } else { //0x01
+                pitchBendValue = pitchBendSharpnessSetting;
+            }
 
-        if (engine.isScratching(deckNumber)) {
-            engine.scratchTick(deckNumber, newValue); // Scratch!
-        } else {
-            engine.setValue(group, "jog", newValue); // Pitch bend
-        }
-    };
+            value = this.inValueScale(value);
+            if (engine.isScratching(this.deck)) {
+                engine.scratchTick(this.deck, value);
+            } else {
+                this.inSetValue(pitchBendValue);
+            }
+        },
+    });
 
     this.filterLowPot = new components.Pot({
         input: function(_channel, _control, value) {

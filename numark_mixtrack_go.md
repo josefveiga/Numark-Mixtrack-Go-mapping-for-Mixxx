@@ -23,11 +23,34 @@ The Numark Mixtrack Go controller is a USB Audio and MIDI Class compliant device
 This controller has a built-in 4 channel output sound card, with a stereo Main output (3.5mm jack) and stereo Headphone output (3.5mm jack).
 
 - To configure the controller's sound card:
-   - Open **Options** > **Preferences** > **Sound Hardware**
+   - Open **Preferences** > **Sound Hardware**
    - Select the **Output** tab.
    - From the **Main** drop-down menu, select the audio interface, then **Channels 1-2**.
    - From the **Headphones** drop-down menu, select the audio interface, then **Channels 3-4**.
    - Click **Apply** to save the changes.
+
+
+## Mapping Settings
+
+This mapping allows for some user settings.
+
+To configure settings:
+- Go to **Options** > **Preferences** > **Controllers**
+- Select **Numark Mixtrack Go** > **confirm this mapping is loaded**
+- Choose your personalized settings on the **Mapping Settings** tab.
+
+Available user settings:
+
+- Jog Wheel
+    - Pitch Bend Sharpness
+       - a finer sharpness is more suitable for fine tuning the beatmatching when using sync with grid aligned tracks.
+       - a more coarse option is better suited for faster manual beatmatching.
+    - Vinyl Mode Default State On
+      - check this box for the Vinyl Mode to be activated from the start.
+- Initial LEDs State
+    - Initial LEDs Setting Delay
+      - select a delay in seconds for the LEDs to be set (default is 2s)
+      - this delay should be long enough for the lightshow termination to finish
 
 
 ## Controller Layout
@@ -37,12 +60,12 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
   - On each side there is a deck control area, where in Mixxx the left deck control will control Deck 1 and the right deck will control Deck 2.
   - Both decks have essentially the same controls each. What differs is that the left side also has the connector to the Main Output and on the right side there's both a USB-C plug and Headphones connector.
 
-![alt text](../../_static/controllers/numark_mixtrack_go_full.svg "Title")
+![alt text](../../_static/controllers/numark_mixtrack_go_full.svg "Schematic of the Full Controller Surface")
 
 
 ## Mixer Area Layout
 
-![alt text](../../_static/controllers/numark_mixtrack_go_mixer.svg "Title")
+![alt text](../../_static/controllers/numark_mixtrack_go_mixer.svg "Schematic of Mixer Area")
 
 
 ```{list-table}
@@ -105,7 +128,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
 
 ## Deck Area Layout
 
-![alt text](../../_static/controllers/numark_mixtrack_go_deck1.svg "Title")
+![alt text](../../_static/controllers/numark_mixtrack_go_deck1.svg "Schematic of the Left Deck Area")
 
 
 ```{list-table}
@@ -153,7 +176,7 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
    {hwlabel}`ACAPEL` and {hwlabel}`INSTRU` functions require a STEMS track to be loaded and a MIXXX version 2.6 or higher.
 ```
 
-![alt text](../../_static/controllers/numark_mixtrack_go_deck2.svg "Title")
+![alt text](../../_static/controllers/numark_mixtrack_go_deck2.svg "Schematic of the Right Deck Area")
 
 ```{list-table}
 :header-rows: 1

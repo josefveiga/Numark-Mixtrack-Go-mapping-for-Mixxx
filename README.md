@@ -10,21 +10,12 @@ Branches:
     - Here will be the most recent features and bugfixes.
     - If you find some problem with the mapping, post a comment in the forum thread and i'll upload the fixed version here.
 
-**alpha files:**  download here (right click + Save Link As) 
- - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.midi.xml) 
+**alpha files:**  download here (right click + Save Link As)
+ - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.midi.xml)
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
 
  **alpha version extra features and bugfixes:**
- - Jog Wheel
-    - Pitch Bend Sharpness 
-       - a finer sharpness is more suitable for fine tuning the beatmatching when using sync with grid aligned tracks.
-       - a more coarse option is better suited for faster manual beatmatching. 
-    - Vinyl Mode Default State On
-      - check this box for the Vinyl Mode to be activated from the start. 
-- Initial LEDs State
-    - Initial LEDs Setting Delay
-      - select a delay in seconds for the LEDs to be set (default is 2s).
-      - this delay should be long enough for the lightshow termination to finish.
+ - **main was updated recently so alpha has no changes from main branch**
 
 # Numark Mixtrack Go
 
@@ -56,6 +47,29 @@ This controller has a built-in 4 channel output sound card, with a stereo Main o
    - From the **Main** drop-down menu, select the audio interface, then **Channels 1-2**.
    - From the **Headphones** drop-down menu, select the audio interface, then **Channels 3-4**.
    - Click **Apply** to save the changes.
+
+
+## Mapping Settings
+
+This mapping allows for some user settings.
+
+To configure settings:
+- Go to **Options** > **Preferences** > **Controllers**
+- Select **Numark Mixtrack Go** > **confirm this mapping is loaded**
+- Choose your personalized settings on the **Mapping Settings** tab.
+
+Available user settings:
+
+- Jog Wheel
+    - Pitch Bend Sharpness
+       - a finer sharpness is more suitable for fine tuning the beatmatching when using sync with grid aligned tracks.
+       - a more coarse option is better suited for faster manual beatmatching.
+    - Vinyl Mode Default State On
+      - check this box for the Vinyl Mode to be activated from the start.
+- Initial LEDs State
+    - Initial LEDs Setting Delay
+      - select a delay in seconds for the LEDs to be set (default is 2s).
+      - this delay should be long enough for the lightshow termination to finish.
 
 
 ## Controller Layout
