@@ -15,7 +15,11 @@ Branches:
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
 
  **alpha version extra features and bugfixes:**
- - **main was updated recently so alpha has no changes from main branch**
+ - Workaround for issue https://github.com/mixxxdj/mixxx/issues/17444 (Learning Wizard deletes settings contents from the xml)
+   - In case you want to use the Learning Wizard and the settings get deleted, the alpha version will fallback to default values.
+   - There's 2 alternatives to keep using settings:
+     - https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/issues/27#issuecomment-6749085828
+     - At the top of the script.js file, all the settings can be directly changed there.
 
 # Numark Mixtrack Go
 
