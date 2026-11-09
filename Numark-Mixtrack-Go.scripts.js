@@ -1,3 +1,22 @@
+//TEMP SETTINGS
+
+// Value suggestions: 0.1, 0.2, 0.6, 0.8, 1 (any value up to 2 i think is fine)
+const pitchBendSharpness = 0.6;
+
+// Value must be true or false
+const isVinylModeInitiallyActive = true;
+
+// any integer larger than 1
+const initialLEDSettingWait = 1;
+
+
+//TEMP SETTINGS END
+
+
+
+
+
+
 // eslint-disable-next-line no-var
 var NumarkMixtrackGo = {};
 
@@ -623,9 +642,9 @@ const IdentityRequestSysex = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
 const ControllerStatusSysex = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
 
 //settings
-const pitchBendSharpnessSetting = engine.getSetting("pitchBendSharpness");
-const isVinylModeInitiallyActivated = engine.getSetting("vinylModeDefaultState");
-const initialLEDSettingDelay = engine.getSetting("initialLEDSettingDelay");
+var pitchBendSharpnessSetting = engine.getSetting("pitchBendSharpness");
+var isVinylModeInitiallyActivated = engine.getSetting("vinylModeDefaultState");
+var initialLEDSettingDelay = engine.getSetting("initialLEDSettingDelay");
 
 // Fade fx blinking
 const fadeFxIndicatorControl = "indicator_500ms";
@@ -679,6 +698,21 @@ NumarkMixtrackGo.init = function() {
     engine.softTakeover("[QuickEffectRack1_[Channel2]]", "super1", true);
     engine.softTakeover("[EqualizerRack1_[Channel1]_Effect1]", "parameter1", true);
     engine.softTakeover("[EqualizerRack1_[Channel2]_Effect1]", "parameter1", true);
+
+    //TEMP
+    if (typeof pitchBendSharpnessSetting === 'undefined') {
+        console.log("pitchBendSharpnessSetting is undefined");
+        pitchBendSharpnessSetting = pitchBendSharpness;
+    }
+    if (typeof isVinylModeInitiallyActivated === 'undefined') {
+        console.log("isVinylModeInitiallyActivated is undefined");
+        isVinylModeInitiallyActivated = isVinylModeInitiallyActive;
+    }
+    if (typeof initialLEDSettingDelay === 'undefined') {
+        console.log("initialLEDSettingDelay is undefined");
+        initialLEDSettingDelay = initialLEDSettingWait;
+    }
+    // TEMP
 };
 
 /**
