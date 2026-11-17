@@ -624,7 +624,8 @@ const ControllerStatusSysex = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
 
 //settings
 const pitchBendSharpnessSetting = engine.getSetting("pitchBendSharpness");
-const isVinylModeInitiallyActivated = engine.getSetting("vinylModeDefaultState");
+const stripSearchSpeedSetting = engine.getSetting("stripSearchSpeed");
+const isVinylModeInitiallyActivated = engine.getSetting("vinylModeDefaultStateOn");
 const initialLEDSettingDelay = engine.getSetting("initialLEDSettingDelay");
 
 // Fade fx blinking
@@ -1256,24 +1257,57 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         rpm: 33 + 1/3, //optional, default as is, here for further tuning if necessary
         group: group,
         vinylMode: isVinylModeInitiallyActivated,
-        //overridden to set pitch bend sharpness
+        //Overriding inputWheel to tune values according to user settings
         inputWheel: function(_channel, _control, value, _status, _group) {
             if (!this.deck) {
                 return;
             }
 
             let pitchBendValue;
+            let scratchValue;
             if (value === 127) {
-                pitchBendValue = -1 * pitchBendSharpnessSetting;
-            } else { //0x01
-                pitchBendValue = pitchBendSharpnessSetting;
+                if (engine.getValue(group, "play") === 0) {
+                    scratchValue = -1 * stripSearchSpeedSetting;
+                } else {
+                    scratchValue = -1;
+                }
+                pitchBendValue = -1;
+            } else { // value === 0x01
+                if (engine.getValue(group, "play") === 0) {
+                    scratchValue = 1 * stripSearchSpeedSetting;
+                } else {
+                    scratchValue = 1;
+                }
+                pitchBendValue = 1;
             }
 
-            value = this.inValueScale(value);
             if (engine.isScratching(this.deck)) {
-                engine.scratchTick(this.deck, value);
+                engine.scratchTick(this.deck, scratchValue);
             } else {
                 this.inSetValue(pitchBendValue);
+
+            }
+        },
+        // Overriding inputTouch because we don't want to have scratching disabled
+        // in the engine when a track is not playing, regardless of the state of this.vinylMode.
+        // The reason is a clear input latency while moving the playhead throughout the waveform
+        // with the jogwheel when the track is not playing, caused by this.inSetValue which is
+        // adequate for pitch bending but not as responsive as with scratchEnable
+        inputTouch: function(channel, control, value, status, _group) {
+            if (!this.deck) {
+                return;
+            }
+
+            if (this.isPress(channel, control, value, status)) {
+                if (engine.getValue(group, "play") === 0 || this.vinylMode) {
+                    engine.scratchEnable(this.deck,
+                        this.wheelResolution,
+                        this.rpm,
+                        this.alpha,
+                        this.beta);
+                }
+            } else {
+                engine.scratchDisable(this.deck);
             }
         },
     });
