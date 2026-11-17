@@ -15,7 +15,11 @@ Branches:
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
 
  **alpha version extra features and bugfixes:**
- - **main was updated recently so alpha has no changes from main branch**
+ - Workaround for issue https://github.com/mixxxdj/mixxx/issues/17444 (Learning Wizard deletes settings contents from the xml)
+   - In case you want to use the Learning Wizard and the settings get deleted, the alpha version will fallback to default values.
+   - There's 2 alternatives to keep using settings:
+     - https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/issues/27#issuecomment-6749085828
+     - At the top of the script.js file, all the settings can be directly changed there.
 
 # Numark Mixtrack Go
 
@@ -64,12 +68,15 @@ Available user settings:
     - Pitch Bend Sharpness
        - a finer sharpness is more suitable for fine tuning the beatmatching when using sync with grid aligned tracks.
        - a more coarse option is better suited for faster manual beatmatching.
+    - Seek Speed (top touch when deck is stopped)
+       - set the speed to stripsearch a track when the deck is stopped.
+       - the default value is 1 (same as scratch speed).
     - Vinyl Mode Default State On
-      - check this box for the Vinyl Mode to be activated from the start.
+       - check this box for the Vinyl Mode to be activated from the start.
 - Initial LEDs State
-    - Initial LEDs Setting Delay
-      - select a delay in seconds for the LEDs to be set (default is 2s).
-      - this delay should be long enough for the lightshow termination to finish.
+     - Initial LEDs Setting Delay.
+       - select a delay in seconds for the LEDs to be set (default is 1s).
+       - this delay should be long enough for the lightshow termination to finish.
 
 
 ## Controller Layout
