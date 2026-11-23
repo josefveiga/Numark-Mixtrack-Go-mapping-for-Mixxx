@@ -12,7 +12,7 @@ Branches:
  - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/paurock/Numark-Mixtrack-Go-mapping-for-Mixxx/enhanced/Numark-Mixtrack-Go.midi.xml)
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/paurock/Numark-Mixtrack-Go-mapping-for-Mixxx/enhanced/Numark-Mixtrack-Go.scripts.js)
 
-See [Enhanced controls and installation notes](ENHANCED_README.md) for the current behavior. Both mapping files must be installed together.
+See [Enhanced controls and installation notes](ENHANCED_README.md) for the current behavior. Both main-deck Play/Pause buttons now perform a 1.5-second fade-in/fade-out via software deck volume; avoid moving the physical channel fader during the fade. Both mapping files must be installed together.
 
 **Original upstream:** [josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx](https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx). The original author's alpha branch may contain other changes; the links above intentionally target our `enhanced` branch.
 
