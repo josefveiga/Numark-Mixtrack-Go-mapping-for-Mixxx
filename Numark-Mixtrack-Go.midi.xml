@@ -28,6 +28,17 @@
         </description>
       </option>
     </group>
+    <group label="Loops">
+      <option variable="loopPadSizesPreset" label="Loop pad sizes in loops mode (beats)" type="enum">
+        <value label="1, 2, 4, 8" default="true">0</value>
+        <value label="1/2, 1, 2, 4">1</value>
+        <value label="1/4, 1/2, 1, 2">2</value>
+        <value label="4, 8, 16, 32">3</value>
+        <description>
+          Select the beat loop sizes that the 4 pads trigger in loops mode (pad 1 to pad 4).
+        </description>
+      </option>
+    </group>
     <group label="Initial LEDs state">
       <option variable="initialLEDSettingDelay" label="Initial LEDs Setting Delay" type="integer" min="1" max="5" step="1" default="1">
         <description>
@@ -84,7 +95,42 @@
           <script-binding/>
         </options>
       </control>
+      <control>
+        <group>[Master]</group>
+        <key>NumarkMixtrackGo.fadeFxShift.input</key>
+        <description>fadefx_shift</description>
+        <status>0x9F</status>
+        <midino>0x47</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
       <!-- Library -->
+      <control>
+        <group>[Channel1]</group>
+        <key>NumarkMixtrackGo.leftShift.input</key>
+        <description>left_mode_shift_long_press_on</description>
+        <status>0x90</status>
+        <midino>0x20</midino>
+        <options><script-binding/></options>
+      </control>
+      <control>
+        <group>[Channel1]</group>
+        <key>NumarkMixtrackGo.leftShift.input</key>
+        <description>left_mode_shift_long_press_off</description>
+        <status>0x80</status>
+        <midino>0x20</midino>
+        <options><script-binding/></options>
+      </control>
+      <control>
+        <group>[Library]</group>
+        <key>NumarkMixtrackGo.browseEncoder.input</key>
+        <description>browse_encoder_rotate_shift</description>
+        <status>0xBF</status>
+        <midino>0x01</midino>
+        <options><script-binding/></options>
+      </control>
+
       <control>
         <group>[Library]</group>
         <key>NumarkMixtrackGo.browseEncoder.input</key>
@@ -105,6 +151,31 @@
           <script-binding/>
         </options>
       </control>
+      <control>
+        <group>[Library]</group>
+        <key>NumarkMixtrackGo.browseEncoder.input</key>
+        <description>browse_encoder_push_shift_on</description>
+        <status>0x9F</status>
+        <midino>0x06</midino>
+        <options><script-binding/></options>
+      </control>
+      <control>
+        <group>[Library]</group>
+        <key>NumarkMixtrackGo.browseEncoder.input</key>
+        <description>browse_encoder_push_shift_off</description>
+        <status>0x8F</status>
+        <midino>0x06</midino>
+        <options><script-binding/></options>
+      </control>
+      <control>
+        <group>[Library]</group>
+        <key>NumarkMixtrackGo.browseEncoder.input</key>
+        <description>browse_encoder_push_off</description>
+        <status>0x8F</status>
+        <midino>0x07</midino>
+        <options><script-binding/></options>
+      </control>
+
       <control>
         <group>[Channel1]</group>
         <key>LoadSelectedTrack</key>
@@ -206,6 +277,46 @@
           <script-binding/>
         </options>
       </control>
+      <control>
+        <group>[Channel1]</group>
+        <key>NumarkMixtrackGo.leftDeck.pflShiftButton.input</key>
+        <description>pfl_shift</description>
+        <status>0x90</status>
+        <midino>0x54</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
+      <control>
+        <group>[Channel2]</group>
+        <key>NumarkMixtrackGo.rightDeck.pflShiftButton.input</key>
+        <description>pfl_shift</description>
+        <status>0x91</status>
+        <midino>0x54</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
+      <control>
+        <group>[Channel1]</group>
+        <key>NumarkMixtrackGo.leftDeck.jogShiftScrub.input</key>
+        <description>jog_turn_shift</description>
+        <status>0xB0</status>
+        <midino>0x2B</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
+      <control>
+        <group>[Channel2]</group>
+        <key>NumarkMixtrackGo.rightDeck.jogShiftScrub.input</key>
+        <description>jog_turn_shift</description>
+        <status>0xB1</status>
+        <midino>0x2B</midino>
+        <options>
+          <script-binding/>
+        </options>
+      </control>
       <!-- Deck Area -->
       <control>
         <group>[Channel1]</group>
@@ -257,6 +368,15 @@
           <script-binding/>
         </options>
       </control>
+      <control>
+        <group>[Channel1]</group>
+        <key>NumarkMixtrackGo.leftDeck.mode.input</key>
+        <description>left_mode_shift_release</description>
+        <status>0x84</status>
+        <midino>0x00</midino>
+        <options><script-binding/></options>
+      </control>
+
       <control>
         <group>[Channel2]</group>
         <key>NumarkMixtrackGo.rightDeck.mode.input</key>
