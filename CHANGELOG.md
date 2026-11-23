@@ -12,6 +12,9 @@ All items describe changes in the `enhanced` branch relative to the upstream-der
 - Configurable loop pad-size presets including fractional-bar values.
 - Optional Deck 1 Auto Next: detect natural track completion, wait 3 seconds, then advance the active library selection and load/play the next track; disabled by default.
 
+## Fixed
+- Auto Next now accepts boolean, numeric and string forms of enabled mapping settings, and detects end-of-track stops even if Mixxx resets the playhead to the beginning. Adds concise diagnostic console logging.
+
 ## Changed
 - Channel PFL keeps headphone monitoring; accidental eject on Shift + PFL was removed.
 - Loops keep normal beatloop toggle semantics with configurable pad lengths.
