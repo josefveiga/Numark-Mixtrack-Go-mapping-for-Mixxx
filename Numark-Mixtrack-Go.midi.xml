@@ -484,6 +484,23 @@
           <script-binding/>
         </options>
       </control>
+      <!-- Shift + SYNC from either deck toggles sync for all four shared samplers -->
+      <control>
+        <group>[Master]</group>
+        <key>NumarkMixtrackGo.samplerSyncAll.input</key>
+        <description>sync_shift_left</description>
+        <status>0x90</status>
+        <midino>0x03</midino>
+        <options><script-binding/></options>
+      </control>
+      <control>
+        <group>[Master]</group>
+        <key>NumarkMixtrackGo.samplerSyncAll.input</key>
+        <description>sync_shift_right</description>
+        <status>0x91</status>
+        <midino>0x03</midino>
+        <options><script-binding/></options>
+      </control>
       <control>
         <group>[Channel1]</group>
         <key>sync_enabled</key>
