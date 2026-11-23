@@ -866,6 +866,19 @@ NumarkMixtrackGo.leftShift = {
     },
 };
 
+// Shift + SYNC on either deck controls the four shared Mixxx sampler slots.
+NumarkMixtrackGo.samplerSyncAll = new components.Button({
+    input: function(_channel, _control, value) {
+        if (value !== 127) {
+            return;
+        }
+        const enable = engine.getValue("[Sampler1]", "sync_mode") === 0 ? 1 : 0;
+        for (let i = 1; i <= 4; i++) {
+            engine.setValue(`[Sampler${i}]`, "sync_mode", enable);
+        }
+    },
+});
+
 // Shift + Fade FX: changes the Fade FX effect (the Quick Effect chain preset of both channels)
 NumarkMixtrackGo.fadeFxShift = new components.Button({
     input: function(_channel, _control, value) {
@@ -1698,8 +1711,7 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                 case 3: // sampler: tap retriggers, hold stops, Shift toggles Sync
                     {
                         const normalPad = control === (0x14 + this.padNumber - 1);
-                        const shiftPad = control === (0x1C + this.padNumber - 1);
-                        if (!normalPad && !shiftPad) {
+                        if (!normalPad) {
                             break;
                         }
 
@@ -1721,15 +1733,6 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                             }
                             break;
                         }
-
-                        if (shiftPad) {
-                            const syncMode = engine.getValue(this.samplerGroup, "sync_mode");
-                            engine.setValue(this.samplerGroup, "sync_mode", syncMode === 0 ? 1 : 0);
-                            break;
-                        }
-
-                        // Sync works without starting the sampler, including when stopped.
-                        // Short-tap playback stays guarded by track_loaded.
 
                         if (this.samplerPadHeld) {
                             break;
