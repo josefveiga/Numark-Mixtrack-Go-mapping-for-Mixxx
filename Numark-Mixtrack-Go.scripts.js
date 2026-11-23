@@ -1584,6 +1584,7 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
             samplerGroup: `[Sampler${(i+1)}]`,
             samplerSyncHoldTimer: 0,
             samplerPadHeld: false,
+            samplerLongPressHandled: false,
             stemGroup: `[Channel${deckNumber}_Stem${(i+1)}]`,
 
             input: function(_channel, control, value) {
@@ -1676,11 +1677,18 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
 
                         const pressed = value === 127;
                         if (!pressed) {
-                            if (normalPad) {
+                            if (normalPad && this.samplerPadHeld) {
+                                const wasLongPress = this.samplerLongPressHandled;
                                 this.samplerPadHeld = false;
+                                this.samplerLongPressHandled = false;
                                 if (this.samplerSyncHoldTimer) {
                                     engine.stopTimer(this.samplerSyncHoldTimer);
                                     this.samplerSyncHoldTimer = 0;
+                                }
+                                // Fire only on release after a short tap. A long hold only changes Sync.
+                                if (!wasLongPress &&
+                                    engine.getValue(this.samplerGroup, "track_loaded") === 1) {
+                                    engine.setValue(this.samplerGroup, "start_play", 1);
                                 }
                             }
                             break;
@@ -1696,22 +1704,18 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                             break;
                         }
 
-                        // Short taps start immediately; holding also toggles this sample's Sync.
                         if (this.samplerPadHeld) {
                             break;
                         }
                         this.samplerPadHeld = true;
-                        engine.setValue(this.samplerGroup, "start_play", 1);
-
-                        if (this.samplerSyncHoldTimer) {
-                            engine.stopTimer(this.samplerSyncHoldTimer);
-                        }
+                        this.samplerLongPressHandled = false;
                         const button = this;
                         this.samplerSyncHoldTimer = engine.beginTimer(1000, function() {
                             button.samplerSyncHoldTimer = 0;
                             if (!button.samplerPadHeld) {
                                 return;
                             }
+                            button.samplerLongPressHandled = true;
                             const syncMode = engine.getValue(button.samplerGroup, "sync_mode");
                             engine.setValue(button.samplerGroup, "sync_mode", syncMode === 0 ? 1 : 0);
                         }, true);
