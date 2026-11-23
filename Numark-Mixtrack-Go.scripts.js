@@ -1694,15 +1694,17 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                             break;
                         }
 
-                        if (engine.getValue(this.samplerGroup, "track_loaded") !== 1) {
-                            break;
-                        }
-
                         if (shiftPad) {
+                            if (engine.getValue(this.samplerGroup, "track_loaded") !== 1) {
+                                break;
+                            }
                             const playing = engine.getValue(this.samplerGroup, "play") === 1;
                             engine.setValue(this.samplerGroup, playing ? "stop" : "start_play", 1);
                             break;
                         }
+
+                        // Allow long-press Sync even when the sampler is stopped.
+                        // Playback remains guarded by track_loaded on short release.
 
                         if (this.samplerPadHeld) {
                             break;
