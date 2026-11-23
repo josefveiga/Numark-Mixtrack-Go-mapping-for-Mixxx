@@ -1478,6 +1478,42 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         },
     });
 
+    // LOAD: short press loads on release; hold one second to eject.
+    this.loadButton = new components.Button({
+        loadHeld: false,
+        longPressHandled: false,
+        holdTimer: 0,
+        input: function(_channel, _control, value, status) {
+            const pressed = (status & 0xF0) === 0x90 && value > 0;
+            if (pressed) {
+                if (this.loadHeld) return;
+                this.loadHeld = true;
+                this.longPressHandled = false;
+                const button = this;
+                this.holdTimer = engine.beginTimer(1000, function() {
+                    button.holdTimer = 0;
+                    if (!button.loadHeld) return;
+                    button.longPressHandled = true;
+                    if (engine.getValue(group, "play") === 0 &&
+                        engine.getValue(group, "track_loaded") === 1) {
+                        script.triggerControl(group, "eject");
+                    }
+                }, true);
+                return;
+            }
+            if (!this.loadHeld) return;
+            this.loadHeld = false;
+            if (this.holdTimer) {
+                engine.stopTimer(this.holdTimer);
+                this.holdTimer = 0;
+            }
+            if (!this.longPressHandled) {
+                script.triggerControl(group, "LoadSelectedTrack");
+            }
+            this.longPressHandled = false;
+        }
+    });
+
     this.pflButton = new components.Button({
         input: function(_channel, _control, value, _status, group) {
             if (value === 127) {
@@ -1491,14 +1527,6 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         }
     });
 
-    // Shift + PFL: ejects the track from the deck (ignored while the deck is playing)
-    this.pflShiftButton = new components.Button({
-        input: function(_channel, _control, value) {
-            if (value === 127 && engine.getValue(group, "play") === 0) {
-                script.triggerControl(group, "eject");
-            }
-        }
-    });
     this.acapelButton = new components.Button({
         input: function(_channel, _control, value) {
             if (value === 127) {
