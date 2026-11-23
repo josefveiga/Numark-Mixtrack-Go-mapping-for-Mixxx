@@ -628,6 +628,7 @@ const beatloopPadSizePresets = [
     [0.5, 1, 2, 4],
     [0.25, 0.5, 1, 2],
     [4, 8, 16, 32],
+    [1, 0.5, 0.25, 0.125], // 1/4, 1/8, 1/16, 1/32 bar in 4/4
 ];
 const beatloopPadSizes = beatloopPadSizePresets[engine.getSetting("loopPadSizesPreset")] || beatloopPadSizePresets[0];
 
