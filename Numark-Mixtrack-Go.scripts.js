@@ -764,7 +764,9 @@ NumarkMixtrackGo.autoNext = {
         const setting = engine.getSetting("autoNextLeftDeck");
         this.enabled = setting === true || setting === 1 ||
             setting === "true" || setting === "1";
-        const configuredDelay = Number(engine.getSetting("autoNextDelaySeconds"));
+        const delaySetting = engine.getSetting("autoNextDelaySeconds");
+        const configuredDelay = delaySetting === null || delaySetting === undefined ||
+            delaySetting === "" ? NaN : Number(delaySetting);
         const delaySeconds = Number.isFinite(configuredDelay) ?
             Math.max(0, Math.min(30, configuredDelay)) : 3;
         this.delayMs = delaySeconds * 1000;
