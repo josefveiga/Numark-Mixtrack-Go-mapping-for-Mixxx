@@ -985,6 +985,77 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
     let currentPadMode = 0;
     let isStemsTrackLoaded = false;
 
+    // 1.5-second fade on the main deck Play/Pause buttons.
+    // The volume fader is temporarily automated; after Pause its prior value
+    // is restored for the next Play (the physical fader is not motorized).
+    this.playFadeButton = new components.Button({
+        fadeDurationMs: 1500,
+        fadeIntervalMs: 25,
+        fadeTimer: 0,
+        fadeStep: 0,
+        fadeFrom: 0,
+        fadeTo: 0,
+        fadeDirection: null,
+        normalVolume: null,
+
+        input: function(_channel, _control, value) {
+            if (value !== 127) {
+                return;
+            }
+
+            const wasFading = this.fadeDirection !== null;
+            const wasFadingOut = this.fadeDirection === "out";
+            const playing = engine.getValue(group, "play") === 1;
+
+            if (this.fadeTimer) {
+                engine.stopTimer(this.fadeTimer);
+                this.fadeTimer = 0;
+            }
+
+            // A second press reverses a fade rather than causing an abrupt cut.
+            const fadeIn = wasFading ? wasFadingOut : !playing;
+            const currentVolume = engine.getValue(group, "volume");
+            if (!wasFading || this.normalVolume === null) {
+                this.normalVolume = currentVolume;
+            }
+
+            this.fadeDirection = fadeIn ? "in" : "out";
+            this.fadeStep = 0;
+            this.fadeFrom = fadeIn && !playing ? 0 : currentVolume;
+            this.fadeTo = fadeIn ? this.normalVolume : 0;
+
+            if (fadeIn && !playing) {
+                engine.setValue(group, "volume", 0);
+                engine.setValue(group, "play", 1);
+            }
+
+            const button = this;
+            const steps = Math.ceil(this.fadeDurationMs / this.fadeIntervalMs);
+            this.fadeTimer = engine.beginTimer(this.fadeIntervalMs, function() {
+                button.fadeStep++;
+                const progress = Math.min(1, button.fadeStep / steps);
+                const volume = button.fadeFrom +
+                    (button.fadeTo - button.fadeFrom) * progress;
+                engine.setValue(group, "volume", volume);
+
+                if (progress < 1) {
+                    return;
+                }
+
+                engine.stopTimer(button.fadeTimer);
+                button.fadeTimer = 0;
+                if (button.fadeDirection === "out") {
+                    engine.setValue(group, "play", 0);
+                    engine.setValue(group, "volume", button.normalVolume);
+                } else {
+                    engine.setValue(group, "volume", button.normalVolume);
+                }
+                button.fadeDirection = null;
+                button.normalVolume = null;
+            });
+        }
+    });
+
     // pfl status led control
     const pflConnection = engine.makeConnection(group, "pfl", function() {
         if (engine.getValue(group, "pfl") === 1) {
