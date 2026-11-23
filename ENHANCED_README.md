@@ -32,7 +32,7 @@ Do not mix a JavaScript file from `enhanced` with the XML from `main` or upstrea
 
 | Control | Action |
 | --- | --- |
-| Main Play/Pause, either deck | 1.5 s fade-in before normal playback level; 1.5 s fade-out before pausing |
+| Main Play/Pause, either deck | Configurable fade-in before normal playback level and fade-out before pausing (default 1.5 s) |
 | Play/Pause pressed again mid-fade | Reverse fade direction |
 | Shift + jog | Fast seek approximately 0.75 s per tick |
 | LOAD short press | Load selected track when the button is released |
@@ -40,6 +40,8 @@ Do not mix a JavaScript file from `enhanced` with the XML from `main` or upstrea
 | Channel headphone/PFL | Standard headphone monitoring; no Shift+PFL eject |
 | Shift + LOAD 1 | Toggle the two Filter/Low knobs between Quick Effect and Low EQ |
 | Shift + LOAD 2 | Toggle jog vinyl mode |
+
+**Fade duration:** In **Preferences → Controllers → Numark Mixtrack Go → Mapping Settings → Play/Pause Fade**, set **Play/Pause Fade Duration (seconds)** from **0.0 to 10.0** in **0.1 s** increments; default **1.5 s**, shared by both decks. A value of **0.0** disables the transition. Reload the controller mapping after changing the value.
 
 **Fade limitation:** The fade automates the deck's software `volume`. Avoid moving the physical channel volume fader during a fade. After fade-out, software volume is restored for subsequent playback.
 
