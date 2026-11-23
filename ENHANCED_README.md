@@ -17,8 +17,9 @@
 | Shift + jog | Fast scrub (0.75 seconds per MIDI step) |
 | Loop-mode Pad | Original Mixxx beatloop toggle behavior (unchanged) |
 | SYNC | Standard deck synchronization (unchanged) |
-| Sampler Pad | Toggle already loaded sample play/stop |
-| Sampler Shift + Pad | No action |
+| Sampler Pad (short press) | Start sample from beginning, including while already playing |
+| Sampler Pad (hold 1 second) | Toggle Sync on that sampler slot (`sync_mode` 0/1) |
+| Sampler Shift + Pad | Toggle that sampler's play/stop (without unloading) |
 
 Both deck headphone/CUE controls retain their PFL behavior. Sampler pad LEDs are kept. Samples must be loaded manually in Mixxx.
 
