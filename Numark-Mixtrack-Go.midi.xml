@@ -49,10 +49,16 @@
           and load/play it after the configured delay. Deck 2 is unaffected.
         </description>
       </option>
+      <option variable="autoNextRightDeck" label="Enable Auto Next on Deck 2" type="boolean" default="false">
+        <description>
+          When the right deck naturally reaches the end, select the next library row
+          and load/play it on Deck 2 after the configured delay. Deck 1 is unaffected.
+        </description>
+      </option>
       <option variable="autoNextDelaySeconds" label="Auto Next Delay (seconds)" type="integer" min="0" max="30" step="1" default="3">
         <description>
-          Seconds to wait after the left deck finishes before loading and playing
-          the next library track. Set 0 to start without an intentional delay.
+          Shared delay in seconds for Auto Next on either deck, from 0 to 30.
+          Set 0 to start without an intentional delay.
         </description>
       </option>
     </group>
