@@ -176,26 +176,8 @@
         <options><script-binding/></options>
       </control>
 
-      <control>
-        <group>[Channel1]</group>
-        <key>LoadSelectedTrack</key>
-        <description>load</description>
-        <status>0x9F</status>
-        <midino>0x02</midino>
-        <options>
-          <normal/>
-        </options>
-      </control>
-      <control>
-        <group>[Channel2]</group>
-        <key>LoadSelectedTrack</key>
-        <description>load</description>
-        <status>0x9F</status>
-        <midino>0x03</midino>
-        <options>
-          <normal/>
-        </options>
-      </control>
+      
+      
       <control>
         <group>[Master]</group>
         <key>NumarkMixtrackGo.filterLowSwitcher.input</key>
@@ -215,6 +197,38 @@
         <options>
           <script-binding/>
         </options>
+      </control>
+      <control>
+        <group>[Channel1]</group>
+        <key>NumarkMixtrackGo.leftDeck.loadButton.input</key>
+        <description>load_press</description>
+        <status>0x9F</status>
+        <midino>0x02</midino>
+        <options><script-binding/></options>
+      </control>
+      <control>
+        <group>[Channel1]</group>
+        <key>NumarkMixtrackGo.leftDeck.loadButton.input</key>
+        <description>load_release</description>
+        <status>0x8F</status>
+        <midino>0x02</midino>
+        <options><script-binding/></options>
+      </control>
+      <control>
+        <group>[Channel2]</group>
+        <key>NumarkMixtrackGo.rightDeck.loadButton.input</key>
+        <description>load_press</description>
+        <status>0x9F</status>
+        <midino>0x03</midino>
+        <options><script-binding/></options>
+      </control>
+      <control>
+        <group>[Channel2]</group>
+        <key>NumarkMixtrackGo.rightDeck.loadButton.input</key>
+        <description>load_release</description>
+        <status>0x8F</status>
+        <midino>0x03</midino>
+        <options><script-binding/></options>
       </control>
       <!-- Mixer Area -->
       <control>
@@ -277,26 +291,8 @@
           <script-binding/>
         </options>
       </control>
-      <control>
-        <group>[Channel1]</group>
-        <key>NumarkMixtrackGo.leftDeck.pflShiftButton.input</key>
-        <description>pfl_shift</description>
-        <status>0x90</status>
-        <midino>0x54</midino>
-        <options>
-          <script-binding/>
-        </options>
-      </control>
-      <control>
-        <group>[Channel2]</group>
-        <key>NumarkMixtrackGo.rightDeck.pflShiftButton.input</key>
-        <description>pfl_shift</description>
-        <status>0x91</status>
-        <midino>0x54</midino>
-        <options>
-          <script-binding/>
-        </options>
-      </control>
+      
+      
       <control>
         <group>[Channel1]</group>
         <key>NumarkMixtrackGo.leftDeck.jogShiftScrub.input</key>
