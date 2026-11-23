@@ -666,6 +666,13 @@ const fadeFxIndicatorControl = "indicator_500ms";
  * Required function.
  * Sets the leds, instantiates the 2 deck objects and sets Mixxx with the controls values of the controller.
  */
+// Shared Play/Pause fade time (both decks), configured in Mapping Settings.
+const configuredFade = engine.getSetting("playFadeDurationSeconds");
+const fadeSeconds = configuredFade === null || configuredFade === undefined ||
+    configuredFade === "" ? NaN : Number(configuredFade);
+NumarkMixtrackGo.playFadeDurationMs =
+    (Number.isFinite(fadeSeconds) ? Math.max(0, Math.min(10, fadeSeconds)) : 1.5) * 1000;
+
 NumarkMixtrackGo.init = function() {
 
     // to disable the lights demo, from npredella@mixxxforums
@@ -1132,11 +1139,11 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
     let currentPadMode = 0;
     let isStemsTrackLoaded = false;
 
-    // 1.5-second fade on the main deck Play/Pause buttons.
+    // Configurable fade on the main deck Play/Pause buttons.
     // The volume fader is temporarily automated; after Pause its prior value
     // is restored for the next Play (the physical fader is not motorized).
     this.playFadeButton = new components.Button({
-        fadeDurationMs: 1500,
+        fadeDurationMs: NumarkMixtrackGo.playFadeDurationMs,
         fadeIntervalMs: 25,
         fadeTimer: 0,
         fadeStep: 0,
@@ -1179,6 +1186,16 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
             if (fadeIn && !playing) {
                 engine.setValue(group, "volume", 0);
                 engine.setValue(group, "play", 1);
+            }
+
+            if (this.fadeDurationMs === 0) {
+                if (!fadeIn) {
+                    engine.setValue(group, "play", 0);
+                }
+                engine.setValue(group, "volume", this.normalVolume);
+                this.fadeDirection = null;
+                this.normalVolume = null;
+                return;
             }
 
             const button = this;
