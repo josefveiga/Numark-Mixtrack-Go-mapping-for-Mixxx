@@ -21,6 +21,7 @@
 | CUE/PFL | Normal headphone pre-fader listening; Shift + CUE/PFL no longer ejects |
 | Loop-mode Pad | Original Mixxx beatloop toggle behavior (unchanged) |
 | Loop-mode preset (optional) | 1/4, 1/8, 1/16, 1/32 bar in 4/4 = 1, 0.5, 0.25, 0.125 beats across Pads 1–4 |
+| Loop-mode preset (optional) | 1, 1/2, 1/8, 1/16 bar in 4/4 = 4, 2, 0.5, 0.25 beats across Pads 1–4 |
 | SYNC | Standard deck synchronization (unchanged) |
 | Sampler Pad (short press) | Retrigger sample from the beginning and apply one-shot Beat Sync (BPM and phase) |
 | Sampler Pad (hold 1 second) | Stop the sample without unloading it; no retrigger on release |
