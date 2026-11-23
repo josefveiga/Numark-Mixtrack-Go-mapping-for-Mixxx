@@ -1623,6 +1623,9 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
             effectUnitEffect1Group: `[EffectRack1_EffectUnit${(i+1)}_Effect1]`,
             effectEnableControl: `group_${group}_enable`,
             samplerGroup: `[Sampler${(i+1)}]`,
+            samplerPadHeld: false,
+            samplerHoldHandled: false,
+            samplerHoldTimer: 0,
             stemGroup: `[Channel${deckNumber}_Stem${(i+1)}]`,
 
             input: function(_channel, control, value) {
@@ -1705,20 +1708,47 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                         }
                     }
                     break;
-                case 3: // sampler: Pad retriggers, Shift+Pad performs one-shot Beat Sync
+                case 3: // sampler: short Pad retriggers + Beat Sync; long Pad stops
                     {
                         const normalPad = control === (0x14 + this.padNumber - 1);
-                        const shiftPad = control === (0x1C + this.padNumber - 1);
-                        if (value !== 127) {
+                        if (!normalPad) {
+                            break; // Shift + Pad has no sampler action
+                        }
+
+                        if (value === 127) {
+                            if (this.samplerPadHeld) {
+                                break;
+                            }
+                            this.samplerPadHeld = true;
+                            this.samplerHoldHandled = false;
+                            const button = this;
+                            this.samplerHoldTimer = engine.beginTimer(1000, function() {
+                                button.samplerHoldTimer = 0;
+                                if (!button.samplerPadHeld || currentPadMode !== 3) {
+                                    return;
+                                }
+                                button.samplerHoldHandled = true;
+                                if (engine.getValue(button.samplerGroup, "play") === 1) {
+                                    script.triggerControl(button.samplerGroup, "stop");
+                                }
+                            }, true);
                             break;
                         }
-                        if (engine.getValue(this.samplerGroup, "track_loaded") !== 1) {
+
+                        if (!this.samplerPadHeld) {
                             break;
                         }
-                        if (shiftPad) {
-                            script.triggerControl(this.samplerGroup, "beatsync");
-                        } else if (normalPad) {
+                        const heldLongEnough = this.samplerHoldHandled;
+                        this.samplerPadHeld = false;
+                        this.samplerHoldHandled = false;
+                        if (this.samplerHoldTimer) {
+                            engine.stopTimer(this.samplerHoldTimer);
+                            this.samplerHoldTimer = 0;
+                        }
+                        if (!heldLongEnough &&
+                            engine.getValue(this.samplerGroup, "track_loaded") === 1) {
                             engine.setValue(this.samplerGroup, "start_play", 1);
+                            script.triggerControl(this.samplerGroup, "beatsync");
                         }
                     }
                     break;
