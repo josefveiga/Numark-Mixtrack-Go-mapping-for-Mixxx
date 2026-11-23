@@ -1708,14 +1708,22 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                         }
                     }
                     break;
-                case 3: // sampler: tap retriggers, hold stops, Shift toggles Sync
+                case 3: // sampler: tap retriggers, hold stops, Shift+Pad beat-syncs once
                     {
                         const normalPad = control === (0x14 + this.padNumber - 1);
+                        const shiftPad = control === (0x1C + this.padNumber - 1);
+                        const pressed = value === 127;
+
+                        // One-shot tempo/phase match; does not engage Sync Lock.
+                        if (shiftPad) {
+                            if (pressed && engine.getValue(this.samplerGroup, "track_loaded") === 1) {
+                                script.triggerControl(this.samplerGroup, "beatsync");
+                            }
+                            break;
+                        }
                         if (!normalPad) {
                             break;
                         }
-
-                        const pressed = value === 127;
                         if (!pressed) {
                             if (normalPad && this.samplerPadHeld) {
                                 const wasLongPress = this.samplerLongPressHandled;
