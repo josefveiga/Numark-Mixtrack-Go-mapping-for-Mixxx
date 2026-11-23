@@ -22,7 +22,8 @@
 | SYNC | Standard deck synchronization (unchanged) |
 | Sampler Pad (short press) | Start sample from beginning, including while already playing |
 | Sampler Pad (hold 1 second) | Stop playback of that sampler slot without unloading |
-| Sampler Shift + Pad | Toggle Sync for that sampler slot (`sync_mode` 0/1), even while stopped |
+| Sampler Shift + Pad | No action |
+| Shift + SYNC (either deck) | Toggle Sync together for all four shared sampler slots, including stopped samples |
 
 Both deck headphone/CUE controls retain their PFL behavior. Sampler pad LEDs are kept. Samples must be loaded manually in Mixxx.
 
