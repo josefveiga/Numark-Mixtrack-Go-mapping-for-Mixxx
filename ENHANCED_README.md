@@ -79,13 +79,13 @@ Main Cue and Hotcue semantics, independent pad modes per deck, Acapella/Instrume
 
 ## Optional Auto Next (Deck 1 only)
 
-Enable **Preferences → Controllers → Numark Mixtrack Go → Mapping Settings → Auto Next → Auto Next on Deck 1 (3-second pause)**. **Disabled by default.**
+Enable **Preferences → Controllers → Numark Mixtrack Go → Mapping Settings → Auto Next → Enable Auto Next on Deck 1**. **Disabled by default.** Set **Auto Next Delay (seconds)** to any whole number from **0 to 30**; default is **3 seconds**. Changes are read when the mapping starts, so reload/restart the mapping after applying settings.
 
-When the left deck plays to the **actual end** of the file, the mapping stops playback, allows **3 seconds of silence**, advances the highlighted selection by one row using `[Playlist],SelectNextTrack`, and sends `[Channel1],LoadSelectedTrackAndPlay`. Deck 2 remains untouched. Auto DJ is **not** used.
+When the left deck plays to the **actual end** of the file, the mapping stops playback, waits for the **configured delay**, advances the highlighted selection by one row using `[Playlist],SelectNextTrack`, and sends `[Channel1],LoadSelectedTrackAndPlay`. Deck 2 remains untouched. Auto DJ is **not** used.
 
 - A manual Play/Pause command from the controller suppresses this action; the timer is also cancelled when playback resumes, the track is replaced or the playback position moves away from the end.
 - The next item is relative to the **currently highlighted row** in the active library track list. Keep that row aligned with the current song; otherwise, an unexpected item may be selected.
-- This is a sequential fallback, not a beat-matched crossfade. Actual silence can be longer than 3 seconds because of track loading.
+- This is a sequential fallback, not a beat-matched crossfade. Actual silence can be longer than the configured delay because of track loading.
 - If there is no next valid row, Mixxx may not start a new track. There is no loop or playlist-wrap guarantee.
 - End-of-track handling varies between Mixxx versions and playback settings; **test with short tracks before relying on it during a show**. Auto Next identifies an automatic stop only when the playhead was within approximately 1.5 seconds of the end while playing. A stop from the Mixxx graphical interface extremely close to the end may be indistinguishable from a natural stop.
 - If it does not advance, inspect the Mixxx log for `Mixtrack Go Auto Next: enabled`, `track ended; waiting 3 seconds`, and `selecting and loading next library track`. These messages help distinguish a disabled setting, end-detection failure, or library selection/loading issue.
