@@ -1623,9 +1623,6 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
             effectUnitEffect1Group: `[EffectRack1_EffectUnit${(i+1)}_Effect1]`,
             effectEnableControl: `group_${group}_enable`,
             samplerGroup: `[Sampler${(i+1)}]`,
-            samplerSyncHoldTimer: 0,
-            samplerPadHeld: false,
-            samplerLongPressHandled: false,
             stemGroup: `[Channel${deckNumber}_Stem${(i+1)}]`,
 
             input: function(_channel, control, value) {
@@ -1708,56 +1705,21 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                         }
                     }
                     break;
-                case 3: // sampler: tap retriggers, hold stops, Shift+Pad beat-syncs once
+                case 3: // sampler: Pad retriggers, Shift+Pad performs one-shot Beat Sync
                     {
                         const normalPad = control === (0x14 + this.padNumber - 1);
                         const shiftPad = control === (0x1C + this.padNumber - 1);
-                        const pressed = value === 127;
-
-                        // One-shot tempo/phase match; does not engage Sync Lock.
+                        if (value !== 127) {
+                            break;
+                        }
+                        if (engine.getValue(this.samplerGroup, "track_loaded") !== 1) {
+                            break;
+                        }
                         if (shiftPad) {
-                            if (pressed && engine.getValue(this.samplerGroup, "track_loaded") === 1) {
-                                script.triggerControl(this.samplerGroup, "beatsync");
-                            }
-                            break;
+                            script.triggerControl(this.samplerGroup, "beatsync");
+                        } else if (normalPad) {
+                            engine.setValue(this.samplerGroup, "start_play", 1);
                         }
-                        if (!normalPad) {
-                            break;
-                        }
-                        if (!pressed) {
-                            if (normalPad && this.samplerPadHeld) {
-                                const wasLongPress = this.samplerLongPressHandled;
-                                this.samplerPadHeld = false;
-                                this.samplerLongPressHandled = false;
-                                if (this.samplerSyncHoldTimer) {
-                                    engine.stopTimer(this.samplerSyncHoldTimer);
-                                    this.samplerSyncHoldTimer = 0;
-                                }
-                                // A short tap retriggers playback; a long hold only stops the sample.
-                                if (!wasLongPress &&
-                                    engine.getValue(this.samplerGroup, "track_loaded") === 1) {
-                                    engine.setValue(this.samplerGroup, "start_play", 1);
-                                }
-                            }
-                            break;
-                        }
-
-                        if (this.samplerPadHeld) {
-                            break;
-                        }
-                        this.samplerPadHeld = true;
-                        this.samplerLongPressHandled = false;
-                        const button = this;
-                        this.samplerSyncHoldTimer = engine.beginTimer(1000, function() {
-                            button.samplerSyncHoldTimer = 0;
-                            if (!button.samplerPadHeld) {
-                                return;
-                            }
-                            button.samplerLongPressHandled = true;
-                            if (engine.getValue(button.samplerGroup, "play") === 1) {
-                                script.triggerControl(button.samplerGroup, "stop");
-                            }
-                        }, true);
                     }
                     break;
                 case 4: // stems
