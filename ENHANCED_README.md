@@ -20,9 +20,9 @@
 | CUE/PFL | Normal headphone pre-fader listening; Shift + CUE/PFL no longer ejects |
 | Loop-mode Pad | Original Mixxx beatloop toggle behavior (unchanged) |
 | SYNC | Standard deck synchronization (unchanged) |
-| Sampler Pad (short press) | Start sample from beginning, including while already playing |
-| Sampler Pad (hold) | No additional action; holding does not stop playback |
-| Sampler Shift + Pad | One-shot Beat Sync (BPM and phase) for that sampler only; does not enable Sync Lock |
+| Sampler Pad (short press) | Retrigger sample from the beginning and apply one-shot Beat Sync (BPM and phase) |
+| Sampler Pad (hold 1 second) | Stop the sample without unloading it; no retrigger on release |
+| Sampler Shift + Pad | No action |
 | Shift + SYNC (either deck) | Toggle Sync together for all four shared sampler slots, including stopped samples |
 
 Both deck headphone/CUE controls retain their PFL behavior. Sampler pad LEDs are kept. Samples must be loaded manually in Mixxx.
