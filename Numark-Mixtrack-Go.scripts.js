@@ -674,6 +674,7 @@ NumarkMixtrackGo.init = function() {
     this.deck = new components.ComponentContainer();
     NumarkMixtrackGo.leftDeck = new NumarkMixtrackGo.Deck(0, 1);
     NumarkMixtrackGo.rightDeck = new NumarkMixtrackGo.Deck(1, 2);
+    NumarkMixtrackGo.autoNext.init();
 
     // https://github.com/mixxxdj/mixxx/wiki/Serato%20sysex
     midi.sendSysexMsg(ControllerStatusSysex, ControllerStatusSysex.length);
@@ -735,7 +736,122 @@ NumarkMixtrackGo.init = function() {
 /**
  * Required function.
  */
+// Optional fallback player: starts the next library track on Deck 1 after
+// three seconds of silence following the natural end of a track.
+// The next item is relative to the currently highlighted library selection.
+// The left deck is intentionally the only deck this feature manages.
+NumarkMixtrackGo.autoNext = {
+    group: "[Channel1]",
+    delayMs: 3000,
+    pollMs: 250,
+    enabled: false,
+    monitorTimer: 0,
+    pendingTimer: 0,
+    inhibitManualStop: false,
+    wasPlaying: false,
+    lastPosition: 0,
+    endStationaryTicks: 0,
+    pendingTrackDuration: 0,
+
+    cancelPending: function() {
+        if (this.pendingTimer) {
+            engine.stopTimer(this.pendingTimer);
+            this.pendingTimer = 0;
+        }
+    },
+
+    init: function() {
+        this.enabled = engine.getSetting("autoNextLeftDeck") === true ||
+            engine.getSetting("autoNextLeftDeck") === "true";
+        if (!this.enabled) {
+            return;
+        }
+        const autoNext = this;
+        this.monitorTimer = engine.beginTimer(this.pollMs, function() {
+            autoNext.check();
+        });
+    },
+
+    shutdown: function() {
+        this.cancelPending();
+        if (this.monitorTimer) {
+            engine.stopTimer(this.monitorTimer);
+            this.monitorTimer = 0;
+        }
+    },
+
+    schedule: function(duration) {
+        if (this.pendingTimer) {
+            return;
+        }
+        const autoNext = this;
+        this.pendingTrackDuration = duration;
+        // A paused or manually stopped track must not keep playing.
+        engine.setValue(this.group, "play", 0);
+        this.pendingTimer = engine.beginTimer(this.delayMs, function() {
+            autoNext.pendingTimer = 0;
+            if (autoNext.inhibitManualStop ||
+                engine.getValue(autoNext.group, "track_loaded") !== 1 ||
+                engine.getValue(autoNext.group, "play") !== 0 ||
+                engine.getValue(autoNext.group, "duration") !== autoNext.pendingTrackDuration ||
+                engine.getValue(autoNext.group, "playposition") < 0.998) {
+                return;
+            }
+            autoNext.wasPlaying = false;
+            autoNext.lastPosition = 0;
+            autoNext.endStationaryTicks = 0;
+            script.triggerControl("[Playlist]", "SelectNextTrack");
+            script.triggerControl(autoNext.group, "LoadSelectedTrackAndPlay");
+        }, true);
+    },
+
+    check: function() {
+        const loaded = engine.getValue(this.group, "track_loaded") === 1;
+        const playing = engine.getValue(this.group, "play") === 1;
+        const position = engine.getValue(this.group, "playposition");
+        const duration = engine.getValue(this.group, "duration");
+
+        if (!loaded || duration <= 0 || position < 0.95) {
+            this.cancelPending();
+            this.endStationaryTicks = 0;
+            if (!loaded || position < 0.95) {
+                this.inhibitManualStop = false;
+                this.wasPlaying = playing;
+            }
+            this.lastPosition = position;
+            return;
+        }
+
+        if (this.pendingTimer) {
+            if (playing || position < 0.998) {
+                this.cancelPending();
+            }
+            this.lastPosition = position;
+            return;
+        }
+
+        if (!this.inhibitManualStop && this.wasPlaying && position >= 0.999 &&
+            !playing) {
+            this.schedule(duration);
+        } else if (!this.inhibitManualStop && playing && this.wasPlaying &&
+            position >= 0.9999 && Math.abs(position - this.lastPosition) < 0.000001) {
+            // Certain playback configurations leave "play" latched at the end.
+            // Only trigger if the playhead is stationary at the actual file end.
+            this.endStationaryTicks++;
+            if (this.endStationaryTicks >= 4) {
+                this.schedule(duration);
+            }
+        } else {
+            this.endStationaryTicks = 0;
+        }
+
+        this.wasPlaying = playing;
+        this.lastPosition = position;
+    }
+};
+
 NumarkMixtrackGo.shutdown = function() {
+    NumarkMixtrackGo.autoNext.shutdown();
     NumarkMixtrackGo.led.setAllOff();
     NumarkMixtrackGo.led.setAllShiftOff();
 };
@@ -1017,6 +1133,14 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
 
             // A second press reverses a fade rather than causing an abrupt cut.
             const fadeIn = wasFading ? wasFadingOut : !playing;
+            if (deckNumber === 1) {
+                NumarkMixtrackGo.autoNext.cancelPending();
+                if (!fadeIn) {
+                    NumarkMixtrackGo.autoNext.inhibitManualStop = true;
+                } else {
+                    NumarkMixtrackGo.autoNext.inhibitManualStop = false;
+                }
+            }
             const currentVolume = engine.getValue(group, "volume");
             if (!wasFading || this.normalVolume === null) {
                 this.normalVolume = currentVolume;
@@ -1573,6 +1697,9 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         input: function(_channel, _control, value, status) {
             const pressed = (status & 0xF0) === 0x90 && value > 0;
             if (pressed) {
+                if (deckNumber === 1) {
+                    NumarkMixtrackGo.autoNext.cancelPending();
+                }
                 if (this.loadHeld) return;
                 this.loadHeld = true;
                 this.longPressHandled = false;
