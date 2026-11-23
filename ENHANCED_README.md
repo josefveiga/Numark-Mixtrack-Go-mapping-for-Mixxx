@@ -21,8 +21,8 @@
 | Loop-mode Pad | Original Mixxx beatloop toggle behavior (unchanged) |
 | SYNC | Standard deck synchronization (unchanged) |
 | Sampler Pad (short press) | Start sample from beginning, including while already playing |
-| Sampler Pad (hold 1 second) | Toggle Sync on that sampler slot (`sync_mode` 0/1) |
-| Sampler Shift + Pad | Toggle that sampler's play/stop (without unloading) |
+| Sampler Pad (hold 1 second) | Stop playback of that sampler slot without unloading |
+| Sampler Shift + Pad | Toggle Sync for that sampler slot (`sync_mode` 0/1), even while stopped |
 
 Both deck headphone/CUE controls retain their PFL behavior. Sampler pad LEDs are kept. Samples must be loaded manually in Mixxx.
 
