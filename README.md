@@ -74,6 +74,10 @@ Available user settings:
        - this delay should be long enough for the lightshow termination to finish.
 
 
+### Configurable Play/Pause fade
+
+Under **Mapping Settings → Play/Pause Fade**, set `Play/Pause Fade Duration (seconds)` from **0.0 to 10.0** in **0.1 s** steps (default **1.5 s**). The setting applies to both decks for fade-in and fade-out; **0.0** disables fading. Reload the mapping after applying changes.
+
 ### Optional Auto Next (Decks 1 and 2)
 
 In **Mapping Settings → Auto Next**, enable `Enable Auto Next on Deck 1` and/or `Enable Auto Next on Deck 2`. Each switch independently enables Auto Next for its deck; both are **off by default**. `Auto Next Delay (seconds)` is shared (0–30, default 3). After a track ends naturally, the mapping waits the configured delay, advances the highlighted library selection, then loads and plays the selected track on the same deck. The other deck is unaffected; Auto DJ is not used. Both decks share the library selection, so simultaneous endings may lead to unexpected selection. See the [enhanced guide](ENHANCED_README.md#optional-auto-next-decks-1-and-2) for limitations and testing.
@@ -136,7 +140,7 @@ In **Mapping Settings → Auto Next**, enable `Enable Auto Next on Deck 1` and/o
 | -      | Shift Cue          | Moves to the main cue point and resumes playing from there. |
 | -      | Shift Cue(2x)      | Loads the previous track on the Library and starts playing it from the main cue point. This action is prevented if **Preferences** > **Deck** > **Loading a track, when a deck is playing** is set to Reject. |
 |17      | Sync               | Long Press to activate Sync Lock. Tap to trigger beat sync (syncs tempo and phase). |
-|18      | Play/Pause         | 1.5-second fade-in when starting and fade-out before pausing; uses software channel volume. |
+|18      | Play/Pause         | Configurable fade-in when starting and fade-out before pausing (default 1.5 s); uses software channel volume. |
 | -      | Shift + Play/Pause | Moves to the main cue point and resumes playing from there. Same as Shift + Cue. |
 
 ```{note}
