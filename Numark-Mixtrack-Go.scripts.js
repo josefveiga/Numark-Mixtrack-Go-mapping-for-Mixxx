@@ -869,14 +869,14 @@ NumarkMixtrackGo.leftShift = {
     },
 };
 
-// Shift + SYNC on either deck controls the four shared Mixxx sampler slots.
+// Shift + SYNC on either deck controls all eight Mixxx sampler slots.
 NumarkMixtrackGo.samplerSyncAll = new components.Button({
     input: function(_channel, _control, value) {
         if (value !== 127) {
             return;
         }
         const enable = engine.getValue("[Sampler1]", "sync_mode") === 0 ? 1 : 0;
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 8; i++) {
             engine.setValue(`[Sampler${i}]`, "sync_mode", enable);
         }
     },
@@ -1140,9 +1140,9 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         }
     });
 
-    // sampler pad loaded and playing led control
+    // Sampler LEDs follow slots 1–4 on the left and 5–8 on the right.
     for (let i = 1; i <= 4; i++) {
-        const samplerGroup = `[Sampler${i}]`;
+        const samplerGroup = `[Sampler${deckIndex * 4 + i}]`;
         engine.makeConnection(samplerGroup, "track_loaded", function() {
             if (currentPadMode === 3) {
                 if (engine.getValue(samplerGroup, "track_loaded") === 1) {
@@ -1438,7 +1438,7 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                     NumarkMixtrackGo.led.setAllPadsOff(deckIndex);
 
                     for (let i = 1; i <= 4; i++) {
-                        if (engine.getValue(`[Sampler${i}]`, "track_loaded") === 1) {
+                        if (engine.getValue(`[Sampler${deckIndex * 4 + i}]`, "track_loaded") === 1) {
                             NumarkMixtrackGo.led.setPadBright(i, deckIndex);
                             NumarkMixtrackGo.led.setPadShiftBright(i, deckIndex);
                         } else {
@@ -1696,7 +1696,7 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
             effectUnitGroup: `[EffectRack1_EffectUnit${(i+1)}]`,
             effectUnitEffect1Group: `[EffectRack1_EffectUnit${(i+1)}_Effect1]`,
             effectEnableControl: `group_${group}_enable`,
-            samplerGroup: `[Sampler${(i+1)}]`,
+            samplerGroup: `[Sampler${deckIndex * 4 + i + 1}]`,
             samplerPadHeld: false,
             samplerHoldHandled: false,
             samplerHoldTimer: 0,
