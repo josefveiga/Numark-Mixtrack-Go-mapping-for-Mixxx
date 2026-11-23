@@ -1695,7 +1695,7 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                         }
                     }
                     break;
-                case 3: // sampler: retrigger, Shift toggle, long press Sync
+                case 3: // sampler: tap retriggers, hold stops, Shift toggles Sync
                     {
                         const normalPad = control === (0x14 + this.padNumber - 1);
                         const shiftPad = control === (0x1C + this.padNumber - 1);
@@ -1713,7 +1713,7 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                                     engine.stopTimer(this.samplerSyncHoldTimer);
                                     this.samplerSyncHoldTimer = 0;
                                 }
-                                // Fire only on release after a short tap. A long hold only changes Sync.
+                                // A short tap retriggers playback; a long hold only stops the sample.
                                 if (!wasLongPress &&
                                     engine.getValue(this.samplerGroup, "track_loaded") === 1) {
                                     engine.setValue(this.samplerGroup, "start_play", 1);
@@ -1723,16 +1723,13 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                         }
 
                         if (shiftPad) {
-                            if (engine.getValue(this.samplerGroup, "track_loaded") !== 1) {
-                                break;
-                            }
-                            const playing = engine.getValue(this.samplerGroup, "play") === 1;
-                            engine.setValue(this.samplerGroup, playing ? "stop" : "start_play", 1);
+                            const syncMode = engine.getValue(this.samplerGroup, "sync_mode");
+                            engine.setValue(this.samplerGroup, "sync_mode", syncMode === 0 ? 1 : 0);
                             break;
                         }
 
-                        // Allow long-press Sync even when the sampler is stopped.
-                        // Playback remains guarded by track_loaded on short release.
+                        // Sync works without starting the sampler, including when stopped.
+                        // Short-tap playback stays guarded by track_loaded.
 
                         if (this.samplerPadHeld) {
                             break;
@@ -1746,8 +1743,9 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                                 return;
                             }
                             button.samplerLongPressHandled = true;
-                            const syncMode = engine.getValue(button.samplerGroup, "sync_mode");
-                            engine.setValue(button.samplerGroup, "sync_mode", syncMode === 0 ? 1 : 0);
+                            if (engine.getValue(button.samplerGroup, "play") === 1) {
+                                script.triggerControl(button.samplerGroup, "stop");
+                            }
                         }, true);
                     }
                     break;
