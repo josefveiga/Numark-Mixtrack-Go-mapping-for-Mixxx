@@ -34,6 +34,7 @@
         <value label="1/2, 1, 2, 4">1</value>
         <value label="1/4, 1/2, 1, 2">2</value>
         <value label="4, 8, 16, 32">3</value>
+        <value label="1/4, 1/8, 1/16, 1/32 bar (4/4): 1, 1/2, 1/4, 1/8 beats">4</value>
         <description>
           Select the beat loop sizes that the 4 pads trigger in loops mode (pad 1 to pad 4).
         </description>
