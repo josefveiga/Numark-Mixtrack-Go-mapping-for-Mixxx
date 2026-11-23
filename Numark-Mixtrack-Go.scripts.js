@@ -1602,15 +1602,30 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                         }
                     }
                     break;
-                case 1: // loops
+                case 1: // loops: Pad activates or retriggers, Shift + Pad disables
                     if (value === 127) {
-                        engine.setValue(group, `beatloop_${beatloopPadSizes[this.padNumber - 1]}_toggle`, 1);
-                        // to speed up the feedback from cliking the button since engine.connection may take up to 500ms
+                        const size = beatloopPadSizes[this.padNumber - 1];
+                        const isShiftPad = control >= 0x1C && control <= 0x1F;
+                        const isNormalPad = control >= 0x14 && control <= 0x17;
+
+                        if (isShiftPad) {
+                            engine.setValue(group, "loop_enabled", 0);
+                        } else if (isNormalPad) {
+                            const loopEnabled = engine.getValue(group, "loop_enabled") === 1;
+                            const sameSizeActive =
+                                engine.getValue(group, `beatloop_${size}_enabled`) === 1;
+
+                            if (loopEnabled && sameSizeActive) {
+                                script.triggerControl(group, "loop_in_goto");
+                            } else {
+                                script.triggerControl(group, `beatloop_${size}_activate`);
+                            }
+                        }
+
+                        // The existing indicator_500ms connection maintains LED feedback.
                         NumarkMixtrackGo.led.setAllPadsOff(deckIndex);
-                        if (engine.getValue(group, `beatloop_${beatloopPadSizes[this.padNumber - 1]}_enabled`) === 1) {
+                        if (engine.getValue(group, `beatloop_${size}_enabled`) === 1) {
                             NumarkMixtrackGo.led.setPadBright(this.padNumber, deckIndex);
-                        } else {
-                            NumarkMixtrackGo.led.setPadOff(this.padNumber, deckIndex);
                         }
                     }
                     break;
