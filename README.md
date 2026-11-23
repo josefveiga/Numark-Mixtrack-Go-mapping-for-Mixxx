@@ -5,21 +5,16 @@ To use this mapping, put both **Numark-Mixtrack-Go.midi.xml** and **Numark-Mixtr
 See Preferences -> Library -> Setting Directory -> Open Mixxx Settings Folder.
 
 Branches:
- - **main** - holds the version included in mixxx (still in review)
- - **alpha** - holds the most recent version
-    - Here will be the most recent features and bugfixes.
-    - If you find some problem with the mapping, post a comment in the forum thread and i'll upload the fixed version here.
+ - **main** — upstream-based mapping.
+ - **enhanced** — our experimental mapping with additional controls. Not yet a tested public release.
 
-**alpha files:**  download here (right click + Save Link As)
- - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.midi.xml)
- - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/alpha/Numark-Mixtrack-Go.scripts.js)
+**Enhanced mapping files (current branch):** right click + Save Link As
+ - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/paurock/Numark-Mixtrack-Go-mapping-for-Mixxx/enhanced/Numark-Mixtrack-Go.midi.xml)
+ - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/paurock/Numark-Mixtrack-Go-mapping-for-Mixxx/enhanced/Numark-Mixtrack-Go.scripts.js)
 
- **alpha version extra features and bugfixes:**
- - Workaround for issue https://github.com/mixxxdj/mixxx/issues/17444 (Learning Wizard deletes settings contents from the xml)
-   - In case you want to use the Learning Wizard and the settings get deleted, the alpha version will fallback to default values.
-   - There's 2 alternatives to keep using settings:
-     - https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx/issues/27#issuecomment-6749085828
-     - At the top of the script.js file, all the settings can be directly changed there.
+See [Enhanced controls and installation notes](ENHANCED_README.md) for the current behavior. Both mapping files must be installed together.
+
+**Original upstream:** [josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx](https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx). The original author's alpha branch may contain other changes; the links above intentionally target our `enhanced` branch.
 
 # Numark Mixtrack Go
 
