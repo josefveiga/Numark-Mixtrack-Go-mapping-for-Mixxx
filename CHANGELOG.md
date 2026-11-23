@@ -3,7 +3,7 @@
 All items describe changes in the `enhanced` branch relative to the upstream-derived `main` branch. This is a review candidate, **not a tested public release**.
 
 ## Added
-- 1.5-second main-deck Play/Pause volume fades with reverse-on-repress behavior, both decks.
+- Configurable main-deck Play/Pause volume fades (0.0–10.0 s in 0.1 s steps; default 1.5 s), shared by both decks, with reverse-on-repress behavior. Zero duration disables the fade.
 - Library Preview Deck controls from browse encoder: toggle on press, seek ~8% per detent while previewing, and navigate when stopped.
 - Shift + browse encoder: focus toggle and accelerated library navigation.
 - Shift + jog fast track-position scrub (~0.75 seconds per tick).
