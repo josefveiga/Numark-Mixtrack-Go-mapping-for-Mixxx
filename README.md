@@ -76,7 +76,7 @@ Available user settings:
 
 ### Optional Auto Next (Deck 1)
 
-In **Mapping Settings → Auto Next**, enable `Auto Next on Deck 1 (3-second pause)` to attempt to load and play the next selected-library track on the left deck after its current song naturally ends and 3 seconds pass. It is **off by default**, does not engage Auto DJ and does not modify Deck 2. The next track is chosen relative to the **highlighted library row**, not by automatically finding the currently loaded track in the playlist. See the [enhanced guide](ENHANCED_README.md#optional-auto-next-deck-1-only) for limitations and the testing checklist.
+In **Mapping Settings → Auto Next**, enable `Enable Auto Next on Deck 1`, then set `Auto Next Delay (seconds)` from 0 to 30 (default 3). After the left-deck song ends naturally, the mapping waits the configured delay, then attempts to load and play the next highlighted-library track. It is **off by default**, does not engage Auto DJ and does not modify Deck 2. The next track is chosen relative to the **highlighted library row**, not by automatically finding the currently loaded track in the playlist. See the [enhanced guide](ENHANCED_README.md#optional-auto-next-deck-1-only) for limitations and the testing checklist.
 
 ## Controller Layout
 
