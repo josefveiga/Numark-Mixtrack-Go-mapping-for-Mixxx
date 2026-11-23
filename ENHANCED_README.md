@@ -15,6 +15,9 @@
 | Left MODE/SHIFT + encoder press | Switch focus between tree and track list |
 | Left MODE/SHIFT + encoder rotate (track list) | Browse 3 rows per tick |
 | Shift + jog | Fast scrub (0.75 seconds per MIDI step) |
+| Loop-mode Pad | Activate beat loop; pressing the same active-size Pad jumps to loop-in |
+| Loop-mode Shift + Pad | Disable the current beat loop (retains loop markers) |
+| SYNC | Standard deck sync, unchanged |
 | Sampler Pad | Toggle already loaded sample play/stop |
 | Sampler Shift + Pad | No action |
 
