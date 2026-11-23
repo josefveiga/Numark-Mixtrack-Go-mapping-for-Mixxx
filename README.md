@@ -74,6 +74,10 @@ Available user settings:
        - this delay should be long enough for the lightshow termination to finish.
 
 
+### Optional Auto Next (Deck 1)
+
+In **Mapping Settings → Auto Next**, enable `Auto Next on Deck 1 (3-second pause)` to attempt to load and play the next selected-library track on the left deck after its current song naturally ends and 3 seconds pass. It is **off by default**, does not engage Auto DJ and does not modify Deck 2. The next track is chosen relative to the **highlighted library row**, not by automatically finding the currently loaded track in the playlist. See the [enhanced guide](ENHANCED_README.md#optional-auto-next-deck-1-only) for limitations and the testing checklist.
+
 ## Controller Layout
 
 - The Numark Mixtrack Go's layout has 3 sections:
