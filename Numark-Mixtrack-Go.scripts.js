@@ -1,3 +1,20 @@
+//TEMP SETTINGS
+
+// Value suggestions: 0.1, 0.2, 0.6, 0.8, 1 (any value up to 2 i think is fine)
+const pitchBendSharpnessSettingTemp = 0.6;
+
+// any integer above 1. above 10 might be too fast
+const stripSearchSpeedSettingTemp = 1;
+
+// Value must be true or false
+const isVinylModeInitiallyActivatedTemp = true;
+
+// any integer larger than 1
+const initialLEDSettingDelayTemp = 1;
+
+
+//TEMP SETTINGS END
+
 // eslint-disable-next-line no-var
 var NumarkMixtrackGo = {};
 
@@ -22,6 +39,7 @@ NumarkMixtrackGo.controls = {
     "browse_encoder_rotate": [0xBF, 0x00],
     "browse_encoder_rotate_shift": [0xBF, 0x01], // currently free
     "browse_encoder_push_on": [0x9F, 0x07],
+    "browse_encoder_push_shift": [0x9F, 0x06],
     "load": [[0x9F, 0x02], [0x9F, 0x03]],
     "load_shift": [[0x9F, 0x48], [0x9F, 0x49]],
 
@@ -604,7 +622,17 @@ const flangerEffectIndex = 12;
 const echoEffectIndex = 14;
 
 const beatloopRollControl = "beatlooproll_1_activate";
-const beatloopPadSizes = [1, 2, 4, 8];
+// Beat loop sizes of the 4 pads in loops mode, selectable in the controller settings (index 0 = original sizes)
+const beatloopPadSizePresets = [
+    [1, 2, 4, 8],
+    [0.5, 1, 2, 4],
+    [0.25, 0.5, 1, 2],
+    [4, 8, 16, 32],
+];
+const beatloopPadSizes = beatloopPadSizePresets[engine.getSetting("loopPadSizesPreset")] || beatloopPadSizePresets[0];
+
+// Shift + platter fast scrub: how many seconds of the track each jog tick moves
+const fastScrubSecondsPerTick = 0.75;
 
 // Fade FX state
 let isFadeFxOn = false;
@@ -623,10 +651,10 @@ const IdentityRequestSysex = [0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7];
 const ControllerStatusSysex = [0xF0, 0x00, 0x20, 0x7F, 0x03, 0x01, 0xF7];
 
 //settings
-const pitchBendSharpnessSetting = engine.getSetting("pitchBendSharpness");
-const stripSearchSpeedSetting = engine.getSetting("stripSearchSpeed");
-const isVinylModeInitiallyActivated = engine.getSetting("vinylModeDefaultStateOn");
-const initialLEDSettingDelay = engine.getSetting("initialLEDSettingDelay");
+var pitchBendSharpnessSetting = engine.getSetting("pitchBendSharpness");
+var stripSearchSpeedSetting = engine.getSetting("stripSearchSpeed");
+var isVinylModeInitiallyActivated = engine.getSetting("vinylModeDefaultStateOn");
+var initialLEDSettingDelay = engine.getSetting("initialLEDSettingDelay");
 
 // Fade fx blinking
 const fadeFxIndicatorControl = "indicator_500ms";
@@ -680,6 +708,25 @@ NumarkMixtrackGo.init = function() {
     engine.softTakeover("[QuickEffectRack1_[Channel2]]", "super1", true);
     engine.softTakeover("[EqualizerRack1_[Channel1]_Effect1]", "parameter1", true);
     engine.softTakeover("[EqualizerRack1_[Channel2]_Effect1]", "parameter1", true);
+
+    //TEMP
+    if (typeof pitchBendSharpnessSetting === 'undefined') {
+        console.log("pitchBendSharpnessSetting is undefined");
+        pitchBendSharpnessSetting = pitchBendSharpnessSettingTemp;
+    }
+    if (typeof stripSearchSpeedSetting === 'undefined') {
+        console.log("stripSearchSpeedSetting is undefined");
+        stripSearchSpeedSetting = stripSearchSpeedSettingTemp;
+    }
+    if (typeof isVinylModeInitiallyActivated === 'undefined') {
+        console.log("isVinylModeInitiallyActivated is undefined");
+        isVinylModeInitiallyActivated = isVinylModeInitiallyActivatedTemp;
+    }
+    if (typeof initialLEDSettingDelay === 'undefined') {
+        console.log("initialLEDSettingDelay is undefined");
+        initialLEDSettingDelay = initialLEDSettingDelayTemp;
+    }
+    // TEMP
 };
 
 /**
@@ -691,57 +738,143 @@ NumarkMixtrackGo.shutdown = function() {
 };
 
 
-NumarkMixtrackGo.browseEncoder = new components.Encoder({
-    isLibraryScrolling: engine.getValue("[PreviewDeck1]", "play") === 0,
+// Browse encoder: context-sensitive library navigation and Preview controls.
+// Left MODE/SHIFT + encoder press changes the focused library panel.
+const libraryFocusSidebar = 2;
+const libraryFocusTracks = 3;
+const previewDeckGroup = "[PreviewDeck1]";
+const previewSeekStep = 0.08;
+
+NumarkMixtrackGo.browseEncoder = {
+    leftShiftHeld: false,
+    pressed: false,
+    normalPushHeld: false,
+    shiftedPushHeld: false,
+    shiftPressHandled: false,
+    shiftedBrowseFraction: 0,
+    pendingPushTimer: 0,
+
+    cancelPendingPush: function() {
+        if (this.pendingPushTimer !== 0) {
+            engine.stopTimer(this.pendingPushTimer);
+            this.pendingPushTimer = 0;
+        }
+    },
+
+    switchLibraryFocus: function() {
+        if (this.shiftPressHandled) {
+            return;
+        }
+        this.shiftPressHandled = true;
+        this.cancelPendingPush();
+        const focused = engine.getValue("[Library]", "focused_widget");
+        engine.setValue("[Library]", "focused_widget",
+            focused === libraryFocusSidebar ? libraryFocusTracks : libraryFocusSidebar);
+    },
 
     input: function(_channel, control, value, status) {
+        const controls = NumarkMixtrackGo.controls;
+        const isRotate = status === controls.browse_encoder_rotate[0] &&
+            (control === controls.browse_encoder_rotate[1] ||
+             control === controls.browse_encoder_rotate_shift[1]);
 
-        if (status === NumarkMixtrackGo.controls.browse_encoder_rotate[0]) {
-            // also need to check for control because there is a 'browse_encoder_rotate_shift' with a different control
-            if (control === NumarkMixtrackGo.controls.browse_encoder_rotate[1]) {
-                if (value === 127) {
-                    this.onEnconderRotateEvent(-1); //rotate right
-                } else {
-                    this.onEnconderRotateEvent(1); //rotate left
+        if (isRotate) {
+            const direction = value === 127 ? -1 : 1;
+            const shifted = this.leftShiftHeld ||
+                control === controls.browse_encoder_rotate_shift[1];
+            if (this.shiftedPushHeld || this.shiftPressHandled) {
+                return;
+            }
+            if (engine.getValue(previewDeckGroup, "play") === 1) {
+                if (shifted) {
+                    return;
                 }
+                const position = engine.getValue(previewDeckGroup, "playposition");
+                engine.setValue(previewDeckGroup, "playposition",
+                    Math.max(0, Math.min(1, position + direction * previewSeekStep)));
+            } else if (shifted &&
+                       engine.getValue("[Library]", "focused_widget") === libraryFocusTracks) {
+                for (let i = 0; i < 3; i++) {
+                    engine.setValue("[Library]", "MoveVertical", direction);
+                }
+            } else if (!shifted) {
+                this.shiftedBrowseFraction = 0;
+                engine.setValue("[Library]", "MoveVertical", direction);
             }
-        } else {
-            this.onButtonPushEvent();
+            return;
+        }
+
+        const isPress = (status & 0xF0) === 0x90 && value > 0;
+        if (control === controls.browse_encoder_push_shift[1]) {
+            this.shiftedPushHeld = isPress;
+            this.pressed = this.normalPushHeld || this.shiftedPushHeld;
+            if (isPress) {
+                this.switchLibraryFocus();
+            } else if (!this.normalPushHeld) {
+                this.shiftPressHandled = false;
+            }
+            return;
+        }
+        if (control !== controls.browse_encoder_push_on[1]) {
+            return;
+        }
+
+        this.normalPushHeld = isPress;
+        this.pressed = this.normalPushHeld || this.shiftedPushHeld;
+        if (!isPress) {
+            if (!this.shiftedPushHeld) {
+                this.shiftPressHandled = false;
+            }
+            return;
+        }
+
+        if (this.leftShiftHeld || this.shiftedPushHeld) {
+            this.switchLibraryFocus();
+            return;
+        }
+        if (this.shiftPressHandled) {
+            return;
+        }
+
+        this.cancelPendingPush();
+        const self = this;
+        this.pendingPushTimer = engine.beginTimer(350, function() {
+            self.pendingPushTimer = 0;
+            if (self.shiftPressHandled || self.leftShiftHeld || self.shiftedPushHeld) {
+                return;
+            }
+            if (engine.getValue("[Library]", "focused_widget") === libraryFocusSidebar) {
+                script.triggerControl("[Library]", "GoToItem");
+            } else {
+                script.triggerControl(previewDeckGroup, "LoadSelectedTrackAndPlay");
+            }
+        }, true);
+    },
+};
+
+// Long-held left MODE is emitted by the controller as a separate Shift note.
+NumarkMixtrackGo.leftShift = {
+    input: function(_channel, _control, value, status) {
+        const encoder = NumarkMixtrackGo.browseEncoder;
+        encoder.leftShiftHeld = (status & 0xF0) === 0x90 && value > 0;
+        if (encoder.leftShiftHeld &&
+            (encoder.normalPushHeld || encoder.pendingPushTimer !== 0)) {
+            encoder.switchLibraryFocus();
+        } else if (!encoder.leftShiftHeld && !encoder.pressed) {
+            encoder.shiftPressHandled = false;
         }
     },
+};
 
-    onEnconderRotateEvent: function(rotateValue) {
-
-        if (this.isLibraryScrolling) {
-            engine.setValue("[Playlist]", "SelectTrackKnob", rotateValue);
-        } else { // isStripSearching - 0.05 modifies the fraction of the duration of the track the encoder moves per detent while rotating
-            const currentPosition = engine.getValue("[PreviewDeck1]", "playposition");
-            let newPosition = currentPosition + currentPosition*0.05*rotateValue;
-            // prevents the trackhead from going past where the GUI can show, as we get the deck in playing status, but hear nothing
-            if (newPosition < 0) {
-                newPosition = 0;
-            }
-            engine.setValue("[PreviewDeck1]", "playposition", newPosition);
-
-            // recover playing state after the track stopping without having to click the encoder again
-            // if you are moving the trackhead back after hitting the end it is because you want to hear more
-            if (engine.getValue("[PreviewDeck1]", "play") === 0) { // reached the end after setValue with playposition and stopped playing
-                engine.setValue("[PreviewDeck1]", "play", 1);
-            }
-        }
-    },
-
-    onButtonPushEvent: function() {
-        if (this.isLibraryScrolling) {
-            this.isLibraryScrolling = false;
-            engine.setValue("[PreviewDeck1]", "LoadSelectedTrackAndPlay", 1);
-        } else {
-            this.isLibraryScrolling = true;
-            script.triggerControl("[PreviewDeck1]", "stop");
+// Shift + Fade FX: changes the Fade FX effect (the Quick Effect chain preset of both channels)
+NumarkMixtrackGo.fadeFxShift = new components.Button({
+    input: function(_channel, _control, value) {
+        if (value === 127) {
+            script.triggerControl("[QuickEffectRack1_[Channel1]]", "next_chain_preset");
+            script.triggerControl("[QuickEffectRack1_[Channel2]]", "next_chain_preset");
         }
     },
 });
-
 NumarkMixtrackGo.fadeFx = new components.Button({
     quickEffectRack1Channel1Super1Value: 0,
     quickEffectRack1Channel2Super1Value: 0,
@@ -1256,6 +1389,7 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         beta: this.alpha/32, // optional, default as is, here for further tuning if necessary
         rpm: 33 + 1/3, //optional, default as is, here for further tuning if necessary
         group: group,
+        deck: deckNumber, // required by JogWheelBasic (scratchEnable/scratchTick use the deck number)
         vinylMode: isVinylModeInitiallyActivated,
         //Overriding inputWheel to tune values according to user settings
         inputWheel: function(_channel, _control, value, _status, _group) {
@@ -1312,6 +1446,20 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         },
     });
 
+    // Shift + platter: fast scrub through the track
+    this.jogShiftScrub = new components.Button({
+        input: function(_channel, _control, value) {
+            const duration = engine.getValue(group, "duration");
+            if (duration <= 0) {
+                return;
+            }
+            // signed tick count: 0x01.. = clockwise, 0x7F.. = counterclockwise
+            const ticks = value < 0x40 ? value : value - 0x80;
+            const position = engine.getValue(group, "playposition");
+            const newPosition = Math.min(1, Math.max(0, position + ticks * fastScrubSecondsPerTick / duration));
+            engine.setValue(group, "playposition", newPosition);
+        }
+    });
     this.filterLowPot = new components.Pot({
         input: function(_channel, _control, value) {
             const newValue = Math.round(script.absoluteLin(value, 0, 1, 0, 127) * 100) / 100;
@@ -1343,6 +1491,14 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         }
     });
 
+    // Shift + PFL: ejects the track from the deck (ignored while the deck is playing)
+    this.pflShiftButton = new components.Button({
+        input: function(_channel, _control, value) {
+            if (value === 127 && engine.getValue(group, "play") === 0) {
+                script.triggerControl(group, "eject");
+            }
+        }
+    });
     this.acapelButton = new components.Button({
         input: function(_channel, _control, value) {
             if (value === 127) {
@@ -1386,28 +1542,26 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         }
     });
 
+    // Shift + Cue (per Numark/Serato docs): returns the track to its beginning (and moves the cue point there).
+    // If the play head is already at the start of the track, loads the previous track from the list.
     this.cueGoToAndPlayDoubleTapButton = new components.Button({
-        timerFinished: true,
-        timerId: 0,
         input: function(_channel, _control, value) {
             if (value === 127) {
-                if (this.timerFinished) {
-                    this.timerFinished = false;
-                    script.triggerControl(group, "cue_gotoandplay");
-                    this.timerId = engine.beginTimer(300, () => {
-                        this.timerFinished = true;
-                    }, true);
-                } else {
-                    this.timerFinished = true;
-                    engine.stopTimer(this.timerId);
+                if (engine.getValue(group, "playposition") <= 0.001) {
                     engine.setValue("[Playlist]", "SelectTrackKnob", -1);
-                    // load previous track and cue go to and play
-                    script.triggerControl(group, "LoadSelectedTrackAndPlay");
+                    script.triggerControl(group, "LoadSelectedTrack");
+                } else {
+                    engine.setValue(group, "start", 1);
+                    engine.setValue(group, "start", 0);
+                    // the seek needs a moment to be applied before the cue can be set at the new position
+                    engine.beginTimer(50, () => {
+                        engine.setValue(group, "cue_set", 1);
+                        engine.setValue(group, "cue_set", 0);
+                    }, true);
                 }
             }
         }
     });
-
     this.playCueGoToAndPlayButton = new components.Button({
         input: function(_channel, _control, value) {
             if (value === 127) {
@@ -1510,18 +1664,12 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                         }
                     }
                     break;
-                case 3:
-                    if (value === 127) {
-                        if (control === 0x14 || control === 0x15 || control === 0x16 || control === 0x17) {
-                            if (engine.getValue(this.samplerGroup, "track_loaded") === 0) {
-                                engine.setValue(this.samplerGroup, "LoadSelectedTrack", 1);
-
-                            } else {
-                                engine.setValue(this.samplerGroup, "cue_gotoandplay", 1);
-                            }
-                        } else { // control = 0x1C or 0x1D or 0x1E or 0x1F
-                            engine.setValue(this.samplerGroup, "eject", 1);
-                        }
+                case 3: // sampler: Pad toggles playback; loading remains manual
+                    if (value === 127 &&
+                        control >= 0x14 && control <= 0x17 &&
+                        engine.getValue(this.samplerGroup, "track_loaded") === 1) {
+                        const playing = engine.getValue(this.samplerGroup, "play") === 1;
+                        engine.setValue(this.samplerGroup, playing ? "stop" : "start_play", 1);
                     }
                     break;
                 case 4: // stems
