@@ -74,9 +74,9 @@ Available user settings:
        - this delay should be long enough for the lightshow termination to finish.
 
 
-### Optional Auto Next (Deck 1)
+### Optional Auto Next (Decks 1 and 2)
 
-In **Mapping Settings → Auto Next**, enable `Enable Auto Next on Deck 1`, then set `Auto Next Delay (seconds)` from 0 to 30 (default 3). After the left-deck song ends naturally, the mapping waits the configured delay, then attempts to load and play the next highlighted-library track. It is **off by default**, does not engage Auto DJ and does not modify Deck 2. The next track is chosen relative to the **highlighted library row**, not by automatically finding the currently loaded track in the playlist. See the [enhanced guide](ENHANCED_README.md#optional-auto-next-deck-1-only) for limitations and the testing checklist.
+In **Mapping Settings → Auto Next**, enable `Enable Auto Next on Deck 1` and/or `Enable Auto Next on Deck 2`. Each switch independently enables Auto Next for its deck; both are **off by default**. `Auto Next Delay (seconds)` is shared (0–30, default 3). After a track ends naturally, the mapping waits the configured delay, advances the highlighted library selection, then loads and plays the selected track on the same deck. The other deck is unaffected; Auto DJ is not used. Both decks share the library selection, so simultaneous endings may lead to unexpected selection. See the [enhanced guide](ENHANCED_README.md#optional-auto-next-decks-1-and-2) for limitations and testing.
 
 ## Controller Layout
 
