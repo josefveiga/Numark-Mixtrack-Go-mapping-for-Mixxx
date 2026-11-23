@@ -764,8 +764,13 @@ NumarkMixtrackGo.autoNext = {
         const setting = engine.getSetting("autoNextLeftDeck");
         this.enabled = setting === true || setting === 1 ||
             setting === "true" || setting === "1";
+        const configuredDelay = Number(engine.getSetting("autoNextDelaySeconds"));
+        const delaySeconds = Number.isFinite(configuredDelay) ?
+            Math.max(0, Math.min(30, configuredDelay)) : 3;
+        this.delayMs = delaySeconds * 1000;
         console.log("Mixtrack Go Auto Next: " +
-            (this.enabled ? "enabled" : "disabled") + " (setting=" + setting + ")");
+            (this.enabled ? "enabled" : "disabled") + " (setting=" + setting +
+            ", delay=" + delaySeconds + "s)");
         if (!this.enabled) {
             return;
         }
@@ -792,7 +797,8 @@ NumarkMixtrackGo.autoNext = {
         this.pendingDuration = duration;
         this.nearEndWhilePlaying = false;
         const autoNext = this;
-        console.log("Mixtrack Go Auto Next: track ended; waiting 3 seconds");
+        console.log("Mixtrack Go Auto Next: track ended; waiting " +
+            (this.delayMs / 1000) + " seconds");
         // The deck is already stopped at the natural end. Do not alter its
         // position; some Mixxx versions reset it to the beginning.
         this.pendingTimer = engine.beginTimer(this.delayMs, function() {
