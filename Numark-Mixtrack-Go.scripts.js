@@ -738,126 +738,144 @@ NumarkMixtrackGo.init = function() {
  */
 // Optional fallback player: starts the next library track on Deck 1 after
 // three seconds of silence following the natural end of a track.
-// The next item is relative to the currently highlighted library selection.
-// The left deck is intentionally the only deck this feature manages.
+// Auto Next follows the highlighted library row, not the currently loaded song.
+// Both decks share the library selection, but have independent end-of-track timers.
 NumarkMixtrackGo.autoNext = {
-    group: "[Channel1]",
-    delayMs: 3000,
-    pollMs: 200,
-    endToleranceSeconds: 1.5,
-    enabled: false,
-    monitorTimer: 0,
-    pendingTimer: 0,
-    inhibitManualStop: false,
-    wasPlaying: false,
-    nearEndWhilePlaying: false,
-    pendingDuration: 0,
+    decks: {},
 
-    cancelPending: function() {
-        if (this.pendingTimer) {
-            engine.stopTimer(this.pendingTimer);
-            this.pendingTimer = 0;
-        }
+    makeDeck: function(deckNumber, delayMs) {
+        return {
+            group: "[Channel" + deckNumber + "]",
+            deckNumber: deckNumber,
+            delayMs: delayMs,
+            pollMs: 200,
+            endToleranceSeconds: 1.5,
+            monitorTimer: 0,
+            pendingTimer: 0,
+            inhibitManualStop: false,
+            wasPlaying: false,
+            nearEndWhilePlaying: false,
+            pendingDuration: 0,
+
+            cancelPending: function() {
+                if (this.pendingTimer) {
+                    engine.stopTimer(this.pendingTimer);
+                    this.pendingTimer = 0;
+                }
+            },
+
+            init: function() {
+                const deck = this;
+                this.monitorTimer = engine.beginTimer(this.pollMs, function() {
+                    deck.check();
+                });
+            },
+
+            shutdown: function() {
+                this.cancelPending();
+                if (this.monitorTimer) {
+                    engine.stopTimer(this.monitorTimer);
+                    this.monitorTimer = 0;
+                }
+            },
+
+            schedule: function(duration) {
+                if (this.pendingTimer) {
+                    return;
+                }
+                this.pendingDuration = duration;
+                this.nearEndWhilePlaying = false;
+                const deck = this;
+                console.log("Mixtrack Go Auto Next: deck " + this.deckNumber +
+                    " ended; waiting " + (this.delayMs / 1000) + " seconds");
+                this.pendingTimer = engine.beginTimer(this.delayMs, function() {
+                    deck.pendingTimer = 0;
+                    if (deck.inhibitManualStop ||
+                        engine.getValue(deck.group, "track_loaded") !== 1 ||
+                        engine.getValue(deck.group, "play") !== 0 ||
+                        engine.getValue(deck.group, "duration") !== deck.pendingDuration) {
+                        console.log("Mixtrack Go Auto Next: deck " + deck.deckNumber +
+                            " cancelled due to state change");
+                        return;
+                    }
+                    deck.wasPlaying = false;
+                    console.log("Mixtrack Go Auto Next: loading next library track on deck " +
+                        deck.deckNumber);
+                    script.triggerControl("[Playlist]", "SelectNextTrack");
+                    script.triggerControl(deck.group, "LoadSelectedTrackAndPlay");
+                }, true);
+            },
+
+            check: function() {
+                const loaded = engine.getValue(this.group, "track_loaded") === 1;
+                const playing = engine.getValue(this.group, "play") === 1;
+                const position = engine.getValue(this.group, "playposition");
+                const duration = engine.getValue(this.group, "duration");
+
+                // The playhead may reset as soon as the track finishes.
+                if (this.wasPlaying && !playing && this.nearEndWhilePlaying &&
+                    !this.inhibitManualStop && loaded && duration > 0) {
+                    this.schedule(duration);
+                }
+
+                if (this.pendingTimer) {
+                    if (playing || !loaded || duration !== this.pendingDuration) {
+                        this.cancelPending();
+                    }
+                    this.wasPlaying = playing;
+                    return;
+                }
+
+                if (!loaded || duration <= 0) {
+                    this.nearEndWhilePlaying = false;
+                    this.inhibitManualStop = false;
+                    this.wasPlaying = false;
+                    return;
+                }
+
+                if (playing) {
+                    this.inhibitManualStop = false;
+                    const secondsLeft = duration * (1 -
+                        Math.min(1, Math.max(0, position)));
+                    this.nearEndWhilePlaying = secondsLeft <= this.endToleranceSeconds;
+                } else if (!this.wasPlaying) {
+                    this.nearEndWhilePlaying = false;
+                }
+
+                this.wasPlaying = playing;
+            }
+        };
     },
 
     init: function() {
-        const setting = engine.getSetting("autoNextLeftDeck");
-        this.enabled = setting === true || setting === 1 ||
-            setting === "true" || setting === "1";
         const delaySetting = engine.getSetting("autoNextDelaySeconds");
         const configuredDelay = delaySetting === null || delaySetting === undefined ||
             delaySetting === "" ? NaN : Number(delaySetting);
         const delaySeconds = Number.isFinite(configuredDelay) ?
             Math.max(0, Math.min(30, configuredDelay)) : 3;
-        this.delayMs = delaySeconds * 1000;
-        console.log("Mixtrack Go Auto Next: " +
-            (this.enabled ? "enabled" : "disabled") + " (setting=" + setting +
-            ", delay=" + delaySeconds + "s)");
-        if (!this.enabled) {
-            return;
-        }
+        const delayMs = delaySeconds * 1000;
 
-        const autoNext = this;
-        this.monitorTimer = engine.beginTimer(this.pollMs, function() {
-            autoNext.check();
+        [1, 2].forEach(function(deckNumber) {
+            const setting = engine.getSetting(
+                deckNumber === 1 ? "autoNextLeftDeck" : "autoNextRightDeck");
+            const enabled = setting === true || setting === 1 ||
+                setting === "true" || setting === "1";
+            console.log("Mixtrack Go Auto Next: deck " + deckNumber + " " +
+                (enabled ? "enabled" : "disabled") + " (setting=" + setting +
+                ", delay=" + delaySeconds + "s)");
+            if (enabled) {
+                const deck = NumarkMixtrackGo.autoNext.makeDeck(deckNumber, delayMs);
+                NumarkMixtrackGo.autoNext.decks[deckNumber] = deck;
+                deck.init();
+            }
         });
     },
 
     shutdown: function() {
-        this.cancelPending();
-        if (this.monitorTimer) {
-            engine.stopTimer(this.monitorTimer);
-            this.monitorTimer = 0;
-        }
-    },
-
-    schedule: function(duration) {
-        if (this.pendingTimer) {
-            return;
-        }
-
-        this.pendingDuration = duration;
-        this.nearEndWhilePlaying = false;
-        const autoNext = this;
-        console.log("Mixtrack Go Auto Next: track ended; waiting " +
-            (this.delayMs / 1000) + " seconds");
-        // The deck is already stopped at the natural end. Do not alter its
-        // position; some Mixxx versions reset it to the beginning.
-        this.pendingTimer = engine.beginTimer(this.delayMs, function() {
-            autoNext.pendingTimer = 0;
-            if (autoNext.inhibitManualStop ||
-                engine.getValue(autoNext.group, "track_loaded") !== 1 ||
-                engine.getValue(autoNext.group, "play") !== 0 ||
-                engine.getValue(autoNext.group, "duration") !== autoNext.pendingDuration) {
-                console.log("Mixtrack Go Auto Next: cancelled due to deck state change");
-                return;
-            }
-
-            autoNext.wasPlaying = false;
-            console.log("Mixtrack Go Auto Next: selecting and loading next library track");
-            script.triggerControl("[Playlist]", "SelectNextTrack");
-            script.triggerControl(autoNext.group, "LoadSelectedTrackAndPlay");
-        }, true);
-    },
-
-    check: function() {
-        const loaded = engine.getValue(this.group, "track_loaded") === 1;
-        const playing = engine.getValue(this.group, "play") === 1;
-        const position = engine.getValue(this.group, "playposition");
-        const duration = engine.getValue(this.group, "duration");
-
-        // Detect the stop BEFORE clearing end-of-track state: Mixxx may
-        // reset playposition to zero immediately when playback finishes.
-        if (this.wasPlaying && !playing && this.nearEndWhilePlaying &&
-            !this.inhibitManualStop && loaded && duration > 0) {
-            this.schedule(duration);
-        }
-
-        if (this.pendingTimer) {
-            // Manual replay, seek, or unload cancels the delayed action.
-            if (playing || !loaded || duration !== this.pendingDuration) {
-                this.cancelPending();
-            }
-            this.wasPlaying = playing;
-            return;
-        }
-
-        if (!loaded || duration <= 0) {
-            this.nearEndWhilePlaying = false;
-            this.inhibitManualStop = false;
-            this.wasPlaying = false;
-            return;
-        }
-
-        if (playing) {
-            this.inhibitManualStop = false;
-            const secondsLeft = duration * (1 - Math.min(1, Math.max(0, position)));
-            this.nearEndWhilePlaying = secondsLeft <= this.endToleranceSeconds;
-        } else if (!this.wasPlaying) {
-            this.nearEndWhilePlaying = false;
-        }
-
-        this.wasPlaying = playing;
+        Object.keys(this.decks).forEach(function(deckNumber) {
+            NumarkMixtrackGo.autoNext.decks[deckNumber].shutdown();
+        });
+        this.decks = {};
     }
 };
 
@@ -866,7 +884,6 @@ NumarkMixtrackGo.shutdown = function() {
     NumarkMixtrackGo.led.setAllOff();
     NumarkMixtrackGo.led.setAllShiftOff();
 };
-
 
 // Browse encoder: context-sensitive library navigation and Preview controls.
 // Left MODE/SHIFT + encoder press changes the focused library panel.
@@ -1144,13 +1161,10 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
 
             // A second press reverses a fade rather than causing an abrupt cut.
             const fadeIn = wasFading ? wasFadingOut : !playing;
-            if (deckNumber === 1) {
-                NumarkMixtrackGo.autoNext.cancelPending();
-                if (!fadeIn) {
-                    NumarkMixtrackGo.autoNext.inhibitManualStop = true;
-                } else {
-                    NumarkMixtrackGo.autoNext.inhibitManualStop = false;
-                }
+            const autoNextDeck = NumarkMixtrackGo.autoNext.decks[deckNumber];
+            if (autoNextDeck) {
+                autoNextDeck.cancelPending();
+                autoNextDeck.inhibitManualStop = !fadeIn;
             }
             const currentVolume = engine.getValue(group, "volume");
             if (!wasFading || this.normalVolume === null) {
@@ -1708,8 +1722,9 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
         input: function(_channel, _control, value, status) {
             const pressed = (status & 0xF0) === 0x90 && value > 0;
             if (pressed) {
-                if (deckNumber === 1) {
-                    NumarkMixtrackGo.autoNext.cancelPending();
+                const autoNextDeck = NumarkMixtrackGo.autoNext.decks[deckNumber];
+                if (autoNextDeck) {
+                    autoNextDeck.cancelPending();
                 }
                 if (this.loadHeld) return;
                 this.loadHeld = true;
