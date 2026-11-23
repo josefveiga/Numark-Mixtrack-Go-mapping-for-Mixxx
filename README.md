@@ -151,7 +151,7 @@ Available user settings:
 | -          | **Hotcue Mode**    | In Hotcue Mode, a Pad sets a hotcue in the current position of the track. Shift + Pad clears the corresponding hotcue. |
 | -          | **Loops Mode**     | In Loops Mode, Pads 1, 2, 3 and 4 set 1, 2, 4 and 8 beat sized beatloops respectively. Shift + Pad clears the corresponding beatloop. |
 | -          | **FX Mode**        | In FX mode, Pad1 starts an Echo Effect, Pad2 starts a Flanger Effect, Pad3 starts a Reverb Effect and Pad4 starts a 1 beat sized beatroll. |
-| -          | **Sampler Mode**   | In Sampler Mode, each pad loads the currently selected track in the library into it's sampler. If it is already loaded, it starts playing the sample until the sample ends. Shift + Pad ejects the track from the corresponding sampler. |
+| -          | **Sampler Mode**   | Samples are loaded manually in Mixxx. A short Pad press starts or retriggers the sample from the beginning; holding Pad for 1 second stops playback without unloading. Shift + Pad toggles Sync for that sampler slot, including while stopped. |
 | -          | **STEMS mode**     | In STEMS Mode, pads mute and unmute the components of the loaded STEMS track: Pad1 affects the Drums stem part, Pad2 affects the FX/Bass stem part, Pad3 affects the Synth stem part and Pad4 affects the Voice stem part. |
 
 ```{note}
