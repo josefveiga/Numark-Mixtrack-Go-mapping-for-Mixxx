@@ -15,6 +15,9 @@
 | Left MODE/SHIFT + encoder press | Switch focus between tree and track list |
 | Left MODE/SHIFT + encoder rotate (track list) | Browse 3 rows per tick |
 | Shift + jog | Fast scrub (0.75 seconds per MIDI step) |
+| LOAD 1 / LOAD 2 (short press) | Load selected track into the corresponding deck (on release) |
+| LOAD 1 / LOAD 2 (hold 1 second) | Eject the track if the corresponding deck is stopped |
+| CUE/PFL | Normal headphone pre-fader listening; Shift + CUE/PFL no longer ejects |
 | Loop-mode Pad | Original Mixxx beatloop toggle behavior (unchanged) |
 | SYNC | Standard deck synchronization (unchanged) |
 | Sampler Pad (short press) | Start sample from beginning, including while already playing |
