@@ -5,14 +5,14 @@ To use this mapping, put both **Numark-Mixtrack-Go.midi.xml** and **Numark-Mixtr
 See Preferences -> Library -> Setting Directory -> Open Mixxx Settings Folder.
 
 Branches:
- - **main** — upstream-based mapping.
- - **enhanced** — our experimental mapping with additional controls. Not yet a tested public release.
+ - **main** — upstream-derived baseline.
+ - **enhanced** — community enhancements proposed for upstream review; not an official release.
 
 **Enhanced mapping files (current branch):** right click + Save Link As
  - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/paurock/Numark-Mixtrack-Go-mapping-for-Mixxx/enhanced/Numark-Mixtrack-Go.midi.xml)
  - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/paurock/Numark-Mixtrack-Go-mapping-for-Mixxx/enhanced/Numark-Mixtrack-Go.scripts.js)
 
-See [Enhanced controls and installation notes](ENHANCED_README.md) for the current behavior. Both main-deck Play/Pause buttons now perform a 1.5-second fade-in/fade-out via software deck volume; avoid moving the physical channel fader during the fade. Both mapping files must be installed together.
+**Start here:** [Enhanced control reference and installation guide](ENHANCED_README.md) · [Changelog](CHANGELOG.md). Both mapping files must be installed together. This branch is a review candidate and has not passed full hardware regression testing.
 
 **Original upstream:** [josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx](https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx). The original author's alpha branch may contain other changes; the links above intentionally target our `enhanced` branch.
 
@@ -90,8 +90,8 @@ Available user settings:
 
 | Number | Control        | Function |
 | ------ | --------       | -------- |
-| 1      | Browser        | A knob for browsing the Library. If pushed, loads a track on the Preview Deck. |
-| 2      | Load           | Each button loads a track to the Deck on their side. |
+| 1      | Browser        | Navigate the library; press to toggle Preview, rotate while previewing to seek; Shift + press changes library focus. See enhanced guide. |
+| 2      | Load           | Short press loads the selected track on release; 1-second hold ejects when playback is stopped. |
 | -      | Shift Load1    | Switches the filter/low knobs between controlling the Low EQ and the Filter (or any other) Effect. |
 | -      | Shift Load2    | Toggles the Vinyl mode in the Jogwheel. |
 | 3      | Bluetooth      | There is currently no functionality for this LED in Mixxx. |
@@ -132,7 +132,7 @@ Available user settings:
 | -      | Shift Cue          | Moves to the main cue point and resumes playing from there. |
 | -      | Shift Cue(2x)      | Loads the previous track on the Library and starts playing it from the main cue point. This action is prevented if **Preferences** > **Deck** > **Loading a track, when a deck is playing** is set to Reject. |
 |17      | Sync               | Long Press to activate Sync Lock. Tap to trigger beat sync (syncs tempo and phase). |
-|18      | Play/Pause         | Plays or Pauses the track. |
+|18      | Play/Pause         | 1.5-second fade-in when starting and fade-out before pausing; uses software channel volume. |
 | -      | Shift + Play/Pause | Moves to the main cue point and resumes playing from there. Same as Shift + Cue. |
 
 ```{note}
@@ -149,8 +149,8 @@ Available user settings:
 | 22         | Mode Leds          | These LEDs highlight the current pad mode. The modes cycle in the order HOT CUE->LOOPS->FX->SAMPLER->STEMS. The FX mode is activated when both the LOOPS and the SAMPLER LEDs are highlighted. |
 | 23         | Pads               | Performance Pads: These pads can be used to trigger Hotcues, Loops, Samples, Stems, and to apply effects. To change the function of the pads, press MODE. |
 | -          | **Hotcue Mode**    | In Hotcue Mode, a Pad sets a hotcue in the current position of the track. Shift + Pad clears the corresponding hotcue. |
-| -          | **Loops Mode**     | In Loops Mode, Pads 1, 2, 3 and 4 set 1, 2, 4 and 8 beat sized beatloops respectively. Shift + Pad clears the corresponding beatloop. |
-| -          | **FX Mode**        | In FX mode, Pad1 starts an Echo Effect, Pad2 starts a Flanger Effect, Pad3 starts a Reverb Effect and Pad4 starts a 1 beat sized beatroll. |
+| -          | **Loops Mode**     | Pads toggle their selected beatloop lengths (1, 2, 4, 8 beats by default). Additional selectable presets are described in the enhanced guide. |
+| -          | **FX Mode**        | Pads 1–3 momentarily enable Echo, Flanger, and Reverb; Pad 4 momentarily enables 1-beat Beat Roll. Release to stop the effect. |
 | -          | **Sampler Mode**   | Samples are loaded manually in Mixxx. Short Pad press retriggers the sample from the beginning and performs one-shot Beat Sync (tempo and phase) without Sync Lock. Holding Pad for 1 second stops the sample without unloading. Shift + Pad does nothing; Shift + SYNC on either deck toggles continuous synchronization for all four shared sampler slots. |
 | -          | **STEMS mode**     | In STEMS Mode, pads mute and unmute the components of the loaded STEMS track: Pad1 affects the Drums stem part, Pad2 affects the FX/Bass stem part, Pad3 affects the Synth stem part and Pad4 affects the Voice stem part. |
 
