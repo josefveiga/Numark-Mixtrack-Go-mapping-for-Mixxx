@@ -1582,6 +1582,8 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
             effectUnitEffect1Group: `[EffectRack1_EffectUnit${(i+1)}_Effect1]`,
             effectEnableControl: `group_${group}_enable`,
             samplerGroup: `[Sampler${(i+1)}]`,
+            samplerSyncHoldTimer: 0,
+            samplerPadHeld: false,
             stemGroup: `[Channel${deckNumber}_Stem${(i+1)}]`,
 
             input: function(_channel, control, value) {
@@ -1664,12 +1666,55 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                         }
                     }
                     break;
-                case 3: // sampler: Pad toggles playback; loading remains manual
-                    if (value === 127 &&
-                        control >= 0x14 && control <= 0x17 &&
-                        engine.getValue(this.samplerGroup, "track_loaded") === 1) {
-                        const playing = engine.getValue(this.samplerGroup, "play") === 1;
-                        engine.setValue(this.samplerGroup, playing ? "stop" : "start_play", 1);
+                case 3: // sampler: retrigger, Shift toggle, long press Sync
+                    {
+                        const normalPad = control === (0x14 + this.padNumber - 1);
+                        const shiftPad = control === (0x1C + this.padNumber - 1);
+                        if (!normalPad && !shiftPad) {
+                            break;
+                        }
+
+                        const pressed = value === 127;
+                        if (!pressed) {
+                            if (normalPad) {
+                                this.samplerPadHeld = false;
+                                if (this.samplerSyncHoldTimer) {
+                                    engine.stopTimer(this.samplerSyncHoldTimer);
+                                    this.samplerSyncHoldTimer = 0;
+                                }
+                            }
+                            break;
+                        }
+
+                        if (engine.getValue(this.samplerGroup, "track_loaded") !== 1) {
+                            break;
+                        }
+
+                        if (shiftPad) {
+                            const playing = engine.getValue(this.samplerGroup, "play") === 1;
+                            engine.setValue(this.samplerGroup, playing ? "stop" : "start_play", 1);
+                            break;
+                        }
+
+                        // Short taps start immediately; holding also toggles this sample's Sync.
+                        if (this.samplerPadHeld) {
+                            break;
+                        }
+                        this.samplerPadHeld = true;
+                        engine.setValue(this.samplerGroup, "start_play", 1);
+
+                        if (this.samplerSyncHoldTimer) {
+                            engine.stopTimer(this.samplerSyncHoldTimer);
+                        }
+                        const button = this;
+                        this.samplerSyncHoldTimer = engine.beginTimer(1000, function() {
+                            button.samplerSyncHoldTimer = 0;
+                            if (!button.samplerPadHeld) {
+                                return;
+                            }
+                            const syncMode = engine.getValue(button.samplerGroup, "sync_mode");
+                            engine.setValue(button.samplerGroup, "sync_mode", syncMode === 0 ? 1 : 0);
+                        }, true);
                     }
                     break;
                 case 4: // stems
