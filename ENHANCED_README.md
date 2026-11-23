@@ -87,7 +87,8 @@ When the left deck plays to the **actual end** of the file, the mapping stops pl
 - The next item is relative to the **currently highlighted row** in the active library track list. Keep that row aligned with the current song; otherwise, an unexpected item may be selected.
 - This is a sequential fallback, not a beat-matched crossfade. Actual silence can be longer than 3 seconds because of track loading.
 - If there is no next valid row, Mixxx may not start a new track. There is no loop or playlist-wrap guarantee.
-- End-of-track handling varies between Mixxx versions and playback settings; **test with short tracks before relying on it during a show**.
+- End-of-track handling varies between Mixxx versions and playback settings; **test with short tracks before relying on it during a show**. Auto Next identifies an automatic stop only when the playhead was within approximately 1.5 seconds of the end while playing. A stop from the Mixxx graphical interface extremely close to the end may be indistinguishable from a natural stop.
+- If it does not advance, inspect the Mixxx log for `Mixtrack Go Auto Next: enabled`, `track ended; waiting 3 seconds`, and `selecting and loading next library track`. These messages help distinguish a disabled setting, end-detection failure, or library selection/loading issue.
 
 ## Known limitations and verification
 
