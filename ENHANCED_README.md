@@ -50,12 +50,12 @@ Do not mix a JavaScript file from `enhanced` with the XML from `main` or upstrea
 | Hotcue | Set or jump to four independent hotcues; Shift + pad clears a hotcue |
 | Loops | Toggle loop lengths selected under **Mapping Settings → Loops** |
 | FX | Pad 1 Echo; Pad 2 Flanger; Pad 3 Reverb; Pad 4 one-beat Beat Roll. These effects are **momentary**: hold to use, release to disable |
-| Sampler | Four shared Mixxx sampler slots. Short press/release restarts the sample and applies one-shot Beat Sync; hold for ≥1 s stops playback without unloading; Shift + pad does nothing |
+| Sampler | Eight independent sampler slots: left pads 1–4 trigger Samplers 1–4; right pads 1–4 trigger Samplers 5–8. Short press/release restarts the sample and applies one-shot Beat Sync; hold for ≥1 s stops playback without unloading; Shift + pad does nothing |
 | Stems | Toggle mute for Drums, Bass, Synths, Vocals (requires a compatible stems track and Mixxx 2.6+) |
 
 FX Pads 1–3 load their default effects when the corresponding effect slot is empty; an effect already loaded in that slot is reused. The Beat Roll pad is not a fourth configurable effect slot.
 
-**Sampler Sync:** Shift + SYNC on either deck toggles continuous synchronization for **all four** shared samplers. Ordinary SYNC keeps the deck's usual behavior. Sampler tracks must be loaded in the Mixxx UI.
+**Sampler Sync:** Shift + SYNC on either deck toggles continuous synchronization for **all eight** samplers. Ordinary SYNC keeps the deck's usual behavior. Sampler tracks must be loaded in the Mixxx UI; ensure eight sampler slots are available in your Mixxx layout.
 
 ### Loop pad presets
 
