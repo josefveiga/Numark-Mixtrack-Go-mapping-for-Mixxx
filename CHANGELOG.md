@@ -10,6 +10,7 @@ All items describe changes in the `enhanced` branch relative to the upstream-der
 - LOAD short press versus 1-second hold, allowing safe eject only when stopped.
 - Eight independent sampler slots (left deck pads → Samplers 1–4; right deck pads → Samplers 5–8), with short-press retrigger plus one-shot beat synchronization, hold-to-stop, and Shift + SYNC toggle for continuous synchronization across all eight.
 - Configurable loop pad-size presets including fractional-bar values.
+- Optional Deck 1 Auto Next: detect natural track completion, wait 3 seconds, then advance the active library selection and load/play the next track; disabled by default.
 
 ## Changed
 - Channel PFL keeps headphone monitoring; accidental eject on Shift + PFL was removed.
