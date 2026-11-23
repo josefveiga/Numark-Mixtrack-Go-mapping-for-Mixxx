@@ -10,7 +10,7 @@ All items describe changes in the `enhanced` branch relative to the upstream-der
 - LOAD short press versus 1-second hold, allowing safe eject only when stopped.
 - Eight independent sampler slots (left deck pads → Samplers 1–4; right deck pads → Samplers 5–8), with short-press retrigger plus one-shot beat synchronization, hold-to-stop, and Shift + SYNC toggle for continuous synchronization across all eight.
 - Configurable loop pad-size presets including fractional-bar values.
-- Optional Deck 1 Auto Next: detect natural track completion, wait a configurable 0–30 seconds (default 3), then advance the active library selection and load/play the next track; disabled by default.
+- Optional Auto Next independently available on Deck 1 and Deck 2: detect natural track completion, wait a shared configurable 0–30 seconds (default 3), then advance the active library selection and load/play the next track on the deck that finished; both disabled by default.
 
 ## Fixed
 - Auto Next now accepts boolean, numeric and string forms of enabled mapping settings, and detects end-of-track stops even if Mixxx resets the playhead to the beginning. Adds concise diagnostic console logging.
