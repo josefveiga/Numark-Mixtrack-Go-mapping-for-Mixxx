@@ -77,6 +77,18 @@ For a 4/4 time signature, one bar equals four beats. These are regular beatloop 
 
 Main Cue and Hotcue semantics, independent pad modes per deck, Acapella/Instrumental stem shortcuts, Filter/Low, crossfader/Fade FX, and standard deck synchronization remain available. Shift + FADE FX advances both Quick Effect chain presets.
 
+## Optional Auto Next (Deck 1 only)
+
+Enable **Preferences → Controllers → Numark Mixtrack Go → Mapping Settings → Auto Next → Auto Next on Deck 1 (3-second pause)**. **Disabled by default.**
+
+When the left deck plays to the **actual end** of the file, the mapping stops playback, allows **3 seconds of silence**, advances the highlighted selection by one row using `[Playlist],SelectNextTrack`, and sends `[Channel1],LoadSelectedTrackAndPlay`. Deck 2 remains untouched. Auto DJ is **not** used.
+
+- A manual Play/Pause command from the controller suppresses this action; the timer is also cancelled when playback resumes, the track is replaced or the playback position moves away from the end.
+- The next item is relative to the **currently highlighted row** in the active library track list. Keep that row aligned with the current song; otherwise, an unexpected item may be selected.
+- This is a sequential fallback, not a beat-matched crossfade. Actual silence can be longer than 3 seconds because of track loading.
+- If there is no next valid row, Mixxx may not start a new track. There is no loop or playlist-wrap guarantee.
+- End-of-track handling varies between Mixxx versions and playback settings; **test with short tracks before relying on it during a show**.
+
 ## Known limitations and verification
 
 - Hardware testing has **not been independently verified** for every interaction, including press/release timing, MIDI LED feedback, fast repeated play/pause presses, Shift combinations, sampler Sync, and loop sizes.
