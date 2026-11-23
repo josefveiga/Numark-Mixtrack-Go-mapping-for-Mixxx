@@ -1,49 +1,93 @@
-# Numark Mixtrack Go — Enhanced Mapping for Mixxx (Release Candidate)
+# Numark Mixtrack Go — Enhanced mapping
 
-> Experimental community variant of the [original Mixtrack Go mapping by josefveiga](https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx). Not an official Mixxx release.
->
-> **Pre-release:** Hardware regression tests and licensing confirmation are required before public release.
+Community enhancements to the [original Numark Mixtrack Go mapping](https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx) by **josefveiga** for Mixxx.
 
-## Enhanced controls
+> **Review candidate, not an official Mixxx release.** Features below reflect the current mapping source. Full hardware regression testing and compatibility with the upstream `alpha` branch have not been confirmed. Do not rely on this experimental mapping for a live performance without testing.
 
-| Input | Behavior |
+## Install
+
+1. Back up your existing Mixxx controller files and settings.
+2. Download both files **from the same `enhanced` branch**:
+   - [Numark-Mixtrack-Go.midi.xml](https://raw.githubusercontent.com/paurock/Numark-Mixtrack-Go-mapping-for-Mixxx/enhanced/Numark-Mixtrack-Go.midi.xml)
+   - [Numark-Mixtrack-Go.scripts.js](https://raw.githubusercontent.com/paurock/Numark-Mixtrack-Go-mapping-for-Mixxx/enhanced/Numark-Mixtrack-Go.scripts.js)
+3. In Mixxx, go to **Preferences → Library → Setting Directory → Open Mixxx Settings Folder** and copy both files into `controllers`.
+4. Restart Mixxx, select **Numark Mixtrack Go**, and configure **Preferences → Controllers → Mapping Settings**.
+
+Do not mix a JavaScript file from `enhanced` with the XML from `main` or upstream `alpha`.
+
+## Controller changes
+
+### Browser and preview
+
+| Control | Action |
 | --- | --- |
-| Browse encoder rotate (Preview stopped) | Navigate library |
-| Browse encoder press (track list) | Toggle Preview play/stop |
-| Browse encoder rotate (Preview playing) | Seek Preview by 8% per tick |
-| Browse encoder press (library tree) | Activate selected tree item |
-| Left MODE/SHIFT + encoder press | Switch focus between tree and track list |
-| Left MODE/SHIFT + encoder rotate (track list) | Browse 3 rows per tick |
-| Shift + jog | Fast scrub (0.75 seconds per MIDI step) |
-| Deck Play/Pause | 1.5-second volume fade-in on Play and fade-out before Pause (both decks) |
-| LOAD 1 / LOAD 2 (short press) | Load selected track into the corresponding deck (on release) |
-| LOAD 1 / LOAD 2 (hold 1 second) | Eject the track if the corresponding deck is stopped |
-| CUE/PFL | Normal headphone pre-fader listening; Shift + CUE/PFL no longer ejects |
-| Loop-mode Pad | Original Mixxx beatloop toggle behavior (unchanged) |
-| Loop-mode preset (optional) | 1/4, 1/8, 1/16, 1/32 bar in 4/4 = 1, 0.5, 0.25, 0.125 beats across Pads 1–4 |
-| Loop-mode preset (optional) | 1, 1/2, 1/8, 1/16 bar in 4/4 = 4, 2, 0.5, 0.25 beats across Pads 1–4 |
-| Loop-mode preset (optional) | 1/2, 1/4, 1/8, 1/16 bar in 4/4 = 2, 1, 0.5, 0.25 beats across Pads 1–4 |
-| SYNC | Standard deck synchronization (unchanged) |
-| Sampler Pad (short press) | Retrigger sample from the beginning and apply one-shot Beat Sync (BPM and phase) |
-| Sampler Pad (hold 1 second) | Stop the sample without unloading it; no retrigger on release |
-| Sampler Shift + Pad | No action |
-| Shift + SYNC (either deck) | Toggle Sync together for all four shared sampler slots, including stopped samples |
+| Browse encoder rotate (Preview stopped) | Move through library entries |
+| Browse encoder push (track list) | Toggle Preview playback |
+| Browse encoder rotate (Preview playing) | Seek Preview by ~8% per tick |
+| Browse encoder push (library tree) | Activate the selected tree entry |
+| Shift + browse encoder push | Switch library focus between tree and track list |
+| Shift + browse encoder rotate | Navigate three library entries per tick |
 
-Both deck headphone/CUE controls retain their PFL behavior. Sampler pad LEDs are kept. Samples must be loaded manually in Mixxx.
+### Decks and mixer
 
-## Installation
+| Control | Action |
+| --- | --- |
+| Main Play/Pause, either deck | 1.5 s fade-in before normal playback level; 1.5 s fade-out before pausing |
+| Play/Pause pressed again mid-fade | Reverse fade direction |
+| Shift + jog | Fast seek approximately 0.75 s per tick |
+| LOAD short press | Load selected track when the button is released |
+| LOAD hold ≥1 s | Eject loaded track, only when the deck is stopped |
+| Channel headphone/PFL | Standard headphone monitoring; no Shift+PFL eject |
+| Shift + LOAD 1 | Toggle the two Filter/Low knobs between Quick Effect and Low EQ |
+| Shift + LOAD 2 | Toggle jog vinyl mode |
 
-1. Back up the existing mapping.
-2. In Mixxx, open **Preferences → Library → Setting Directory → Open Mixxx Settings Folder**.
-3. Copy `Numark-Mixtrack-Go.midi.xml` and `Numark-Mixtrack-Go.scripts.js` into the `controllers` folder.
-4. Restart Mixxx and select the mapping.
+**Fade limitation:** The fade automates the deck's software `volume`. Avoid moving the physical channel volume fader during a fade. After fade-out, software volume is restored for subsequent playback.
 
-## Status
+### Performance pads
 
-This branch is for development and review, **not a tested public release**. The JavaScript and XML syntax passed static checks, but actual-controller tests are pending (Shift timing, PFL, sampler, LEDs, both decks).
+| Mode | Pads |
+| --- | --- |
+| Hotcue | Set or jump to four independent hotcues; Shift + pad clears a hotcue |
+| Loops | Toggle loop lengths selected under **Mapping Settings → Loops** |
+| FX | Pad 1 Echo; Pad 2 Flanger; Pad 3 Reverb; Pad 4 one-beat Beat Roll. These effects are **momentary**: hold to use, release to disable |
+| Sampler | Four shared Mixxx sampler slots. Short press/release restarts the sample and applies one-shot Beat Sync; hold for ≥1 s stops playback without unloading; Shift + pad does nothing |
+| Stems | Toggle mute for Drums, Bass, Synths, Vocals (requires a compatible stems track and Mixxx 2.6+) |
 
-## Attribution and licensing
+FX Pads 1–3 load their default effects when the corresponding effect slot is empty; an effect already loaded in that slot is reused. The Beat Roll pad is not a fourth configurable effect slot.
 
-Original mapping by [josefveiga](https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx). See [Mixxx integration PR #16813](https://github.com/mixxxdj/mixxx/pull/16813).
+**Sampler Sync:** Shift + SYNC on either deck toggles continuous synchronization for **all four** shared samplers. Ordinary SYNC keeps the deck's usual behavior. Sampler tracks must be loaded in the Mixxx UI.
 
-The original standalone mapping repository does not have a top-level `LICENSE` file. Verify applicable redistribution terms and preserve attribution before releasing a modified archive.
+### Loop pad presets
+
+Select one of the following in **Preferences → Controllers → Numark Mixtrack Go → Mapping Settings → Loops**. Values below are shown in **beats**, in Pad 1–4 order:
+
+| Preset | Pad 1 | Pad 2 | Pad 3 | Pad 4 |
+| --- | ---: | ---: | ---: | ---: |
+| Original / default | 1 | 2 | 4 | 8 |
+| Short | 0.5 | 1 | 2 | 4 |
+| Shorter | 0.25 | 0.5 | 1 | 2 |
+| Long | 4 | 8 | 16 | 32 |
+| 1/4 → 1/32 bar (4/4) | 1 | 0.5 | 0.25 | 0.125 |
+| 1, 1/2, 1/8, 1/16 bar (4/4) | 4 | 2 | 0.5 | 0.25 |
+| 1/2 → 1/16 bar (4/4) | 2 | 1 | 0.5 | 0.25 |
+
+For a 4/4 time signature, one bar equals four beats. These are regular beatloop toggles, **not** slip-style loop rolls.
+
+### Other controls retained
+
+Main Cue and Hotcue semantics, independent pad modes per deck, Acapella/Instrumental stem shortcuts, Filter/Low, crossfader/Fade FX, and standard deck synchronization remain available. Shift + FADE FX advances both Quick Effect chain presets.
+
+## Known limitations and verification
+
+- Hardware testing has **not been independently verified** for every interaction, including press/release timing, MIDI LED feedback, fast repeated play/pause presses, Shift combinations, sampler Sync, and loop sizes.
+- Effect defaults use indexed positions in Mixxx's effect list; upstream reorderings could select a different effect.
+- Stems require compatible track data; standard MP3 files are not automatically separated by this mapping.
+- Confirm behavior on the specific Mixxx version you use. The upstream repository's `alpha` branch contains additional work which has not been merged into `enhanced`.
+
+Suggested regression checklist: each deck's Play/Pause transitions; LOAD click/hold while playing/stopped; PFL; all loop presets; FX press/release; sampler retrigger/hold/Sync; library preview & browse; stems; LED feedback.
+
+## Upstream contribution and attribution
+
+This work is based on [josefveiga's original mapping](https://github.com/josefveiga/Numark-Mixtrack-Go-mapping-for-Mixxx). See [CHANGELOG.md](CHANGELOG.md) for changes made in this fork.
+
+The upstream repository has no top-level LICENSE file at the time of preparation. Retain original attribution and coordinate any relicensing or distribution decisions with the original author. A pull request requests review; it does not imply official endorsement or acceptance.
