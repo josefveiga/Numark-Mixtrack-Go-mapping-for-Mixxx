@@ -42,6 +42,15 @@
         </description>
       </option>
     </group>
+    <group label="Auto Next">
+      <option variable="autoNextLeftDeck" label="Auto Next on Deck 1 (3-second pause)" type="boolean" default="false">
+        <description>
+          After the left deck naturally reaches the end, wait three seconds,
+          then select the next highlighted-library row and load/play it on Deck 1.
+          The right deck is unchanged. Does not trigger on manual Play/Pause.
+        </description>
+      </option>
+    </group>
     <group label="Initial LEDs state">
       <option variable="initialLEDSettingDelay" label="Initial LEDs Setting Delay" type="integer" min="1" max="5" step="1" default="1">
         <description>
