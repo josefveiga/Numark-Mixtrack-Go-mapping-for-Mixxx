@@ -1262,9 +1262,9 @@ NumarkMixtrackGo.Deck = function(deckIndex, deckNumber) {
                 if (engine.getValue(group, "play") === 0) {
                     scratchValue = -1 * stripSearchSpeedSetting;
                 } else {
-                    scratchValue = -1 * pitchBendSharpnessSetting;
+                    scratchValue = -1;
                 }
-                pitchBendValue = -1;
+                pitchBendValue = -1 * pitchBendSharpnessSetting;
             } else { // value === 0x01
                 if (engine.getValue(group, "play") === 0) {
                     scratchValue = 1 * stripSearchSpeedSetting;
